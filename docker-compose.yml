@@ -64,6 +64,13 @@ services:
     image: prom/prometheus:v2.11.1
     ports:
       - 9090:9090
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+
+  alertmanager:
+    image: prom/alertmanager:v0.18.0
+    ports:
+      - 9093:9093
 
   grafana:
     image: grafana/grafana:6.3.0
