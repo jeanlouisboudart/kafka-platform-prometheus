@@ -1,5 +1,11 @@
 version: "3"
 services:
+  jmx-exporter:
+    build: ./jmx-exporter
+    tty: true
+    volumes:
+    - jmx-exporter-vol:/usr/share/jmx_exporter/
+
   zookeeper-1:
     image: confluentinc/cp-zookeeper
     hostname: zookeeper-1
@@ -7,6 +13,11 @@ services:
       ZOOKEEPER_SERVER_ID: "1"
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
+      EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
+    volumes:
+    - jmx-exporter-vol:/usr/share/jmx_exporter/
+    depends_on:
+    - jmx-exporter
 
   zookeeper-2:
     image: confluentinc/cp-zookeeper
@@ -15,6 +26,11 @@ services:
       ZOOKEEPER_SERVER_ID: "2"
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
+      EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
+    volumes:
+    - jmx-exporter-vol:/usr/share/jmx_exporter/
+    depends_on:
+    - jmx-exporter
 
   zookeeper-3:
     image: confluentinc/cp-zookeeper
@@ -23,6 +39,11 @@ services:
       ZOOKEEPER_SERVER_ID: "3"
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVERS: ${ZOOKEEPER_SERVERS}
+      EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
+    volumes:
+    - jmx-exporter-vol:/usr/share/jmx_exporter/
+    depends_on:
+    - jmx-exporter
 
   kafka-1:
     image: confluentinc/cp-kafka
@@ -35,6 +56,11 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181,zookeeper-4:2181"
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-1:9092"
       KAFKA_BROKER_ID: "1"
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-2.0.0.yml
+    volumes:
+    - jmx-exporter-vol:/usr/share/jmx_exporter/
+    depends_on:
+    - jmx-exporter
 
   kafka-2:
     image: confluentinc/cp-kafka
@@ -47,6 +73,11 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181,zookeeper-4:2181"
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-2:9092"
       KAFKA_BROKER_ID: "2"
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-2.0.0.yml
+    volumes:
+    - jmx-exporter-vol:/usr/share/jmx_exporter/
+    depends_on:
+    - jmx-exporter
 
   kafka-3:
     image: confluentinc/cp-kafka
@@ -59,6 +90,11 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181,zookeeper-4:2181"
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-3:9092"
       KAFKA_BROKER_ID: "3"
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-2.0.0.yml
+    volumes:
+    - jmx-exporter-vol:/usr/share/jmx_exporter/
+    depends_on:
+    - jmx-exporter
 
   prometheus:
     image: prom/prometheus:v2.11.1
@@ -90,3 +126,6 @@ services:
       - 3000:3000
     volumes:
       - ./grafana/provisioning/:/etc/grafana/provisioning/
+
+volumes:
+  jmx-exporter-vol: {}

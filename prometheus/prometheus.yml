@@ -22,3 +22,23 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
     - targets: ['node-exporter:9100']
+
+  - job_name: 'kafka'
+    scrape_interval: 5s
+    static_configs:
+    - targets:
+      - 'kafka-1:1234'
+      - 'kafka-2:1234'
+      - 'kafka-3:1234'
+      labels:
+        env: 'dev'
+
+  - job_name: 'zookeeper'
+    scrape_interval: 5s
+    static_configs:
+    - targets:
+      - 'zookeeper-1:1234'
+      - 'zookeeper-2:1234'
+      - 'zookeeper-3:1234'
+      labels:
+        env: 'dev'
