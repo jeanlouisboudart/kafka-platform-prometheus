@@ -59,3 +59,15 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181,zookeeper-4:2181"
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-3:9092"
       KAFKA_BROKER_ID: "3"
+
+  prometheus:
+    image: prom/prometheus:v2.11.1
+    ports:
+      - 9090:9090
+
+  grafana:
+    image: grafana/grafana:6.3.0
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
