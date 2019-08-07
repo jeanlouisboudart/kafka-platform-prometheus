@@ -85,3 +85,8 @@ rules:
   type: GAUGE
   labels:
     quantile: "0.$4"
+
+# Specific rule
+- pattern : kafka.server<type=KafkaRequestHandlerPool, name=RequestHandlerAvgIdlePercent><>OneMinuteRate
+  name: kafka_server_kafkarequesthandlerpool_requesthandleravgidlepercent
+  type: GAUGE
