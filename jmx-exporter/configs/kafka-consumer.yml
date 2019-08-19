@@ -1,0 +1,19 @@
+lowercaseOutputName: true
+rules:
+- pattern : 'kafka.consumer<type=(.+), client-id=(.+)><>(.+):'
+  name: kafka_consumer_$1_$3
+  type: GAUGE
+  labels:
+    client-id: "$2"
+- pattern : 'kafka.consumer<type=(.+), client-id=(.+), node-id=([0-9]+)><>(.+):'
+  name: kafka_consumer_$1_$4
+  type: GAUGE
+  labels:
+    client-id: "$2"
+    host-id: "$3"
+- pattern : 'kafka.consumer<type=(.+), client-id=(.+), topic=([-.w]+)><>(.+):'
+  name: kafka_consumer_$1_$4
+  type: GAUGE
+  labels:
+    client-id: "$2"
+    topic: "$3"

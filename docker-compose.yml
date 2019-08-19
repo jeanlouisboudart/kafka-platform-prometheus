@@ -52,6 +52,7 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
+      - jmx-exporter
     environment:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181,zookeeper-4:2181"
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-1:9092"
@@ -59,8 +60,6 @@ services:
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-2.0.0.yml
     volumes:
     - jmx-exporter-vol:/usr/share/jmx_exporter/
-    depends_on:
-    - jmx-exporter
 
   kafka-2:
     image: confluentinc/cp-kafka
@@ -69,6 +68,7 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
+      - jmx-exporter
     environment:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181,zookeeper-4:2181"
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-2:9092"
@@ -76,8 +76,6 @@ services:
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-2.0.0.yml
     volumes:
     - jmx-exporter-vol:/usr/share/jmx_exporter/
-    depends_on:
-    - jmx-exporter
 
   kafka-3:
     image: confluentinc/cp-kafka
@@ -86,6 +84,7 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
+      - jmx-exporter
     environment:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181,zookeeper-4:2181"
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-3:9092"
@@ -93,8 +92,31 @@ services:
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-2.0.0.yml
     volumes:
     - jmx-exporter-vol:/usr/share/jmx_exporter/
+
+
+  producer:
+    build: ./sample-application/producer
+    environment:
+      JAVA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-producer.yml
+    volumes:
+      - jmx-exporter-vol:/usr/share/jmx_exporter/
     depends_on:
-    - jmx-exporter
+      - jmx-exporter
+      - kafka-1
+      - kafka-2
+      - kafka-3
+
+  consumer:
+    build: ./sample-application/consumer
+    environment:
+      JAVA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-consumer.yml
+    volumes:
+      - jmx-exporter-vol:/usr/share/jmx_exporter/
+    depends_on:
+      - jmx-exporter
+      - kafka-1
+      - kafka-2
+      - kafka-3
 
   prometheus:
     image: prom/prometheus:v2.11.1
