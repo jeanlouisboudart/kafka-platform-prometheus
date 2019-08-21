@@ -15,7 +15,6 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 4,
   "links": [],
   "panels": [
     {
@@ -24,6 +23,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "description": "The average number of bytes sent per second to the broker.\n",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -58,9 +58,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_producer_producer_metrics_outgoing_byte_rate{job=\"producer\"}",
+          "expr": "rate(kafka_producer_producer_metrics_outgoing_byte_total{job=\"producer\"}[1m])",
           "legendFormat": "{{client_id}} - {{instance}}",
-          "refId": "A"
+          "refId": "B"
         }
       ],
       "thresholds": [],
@@ -110,6 +110,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "description": "The average number of bytes sent per second to the broker per topic.\n",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -144,7 +145,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_producer_producer_topic_metrics_byte_rate{job=\"producer\"}) by (topic)",
+          "expr": "sum(rate(kafka_producer_producer_topic_metrics_byte_total{job=\"producer\"}[1m])) by (topic)",
           "hide": false,
           "legendFormat": "{{topic}}",
           "refId": "A"
@@ -197,6 +198,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "description": "The average number of messages sent per second to the broker.\n",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -231,7 +233,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_producer_producer_metrics_record_send_rate{job=\"producer\"}",
+          "expr": "rate(kafka_producer_producer_metrics_record_send_total{job=\"producer\"}[1m])",
           "hide": false,
           "legendFormat": "{{client_id}} - {{instance}}",
           "refId": "A"
@@ -284,6 +286,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "description": "The average number of messages sent per second to the broker per topic.\n",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -318,7 +321,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_producer_producer_topic_metrics_record_send_rate{job=\"producer\"}) by (topic)",
+          "expr": "sum(rate(kafka_producer_producer_topic_metrics_record_send_total{job=\"producer\"}[1m])) by (topic)",
           "hide": false,
           "legendFormat": "{{topic}}",
           "refId": "A"
@@ -371,6 +374,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "description": "The average compression rate of record batches for a topic.",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -458,6 +462,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "description": "The average number of bytes sent per partition per-request.",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -545,6 +550,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "description": "The average per-second number of record sends that resulted in errors.\n",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -579,10 +585,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_producer_producer_metrics_record_error_rate",
+          "expr": "rate(kafka_producer_producer_metrics_record_error_total{job=\"producer\"}[1m])",
           "hide": false,
           "legendFormat": "{{client_id}} - {{instance}}",
-          "refId": "A"
+          "refId": "B"
         }
       ],
       "thresholds": [],
@@ -719,6 +725,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "description": "The average request latency in ms",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -806,6 +813,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "description": "The average number of records per request.",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -893,6 +901,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "description": "The average number of requests sent per second to the broker.\n",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -927,7 +936,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_producer_producer_metrics_request_rate",
+          "expr": "rate(kafka_producer_producer_metrics_request_total{job=\"producer\"}[1m])",
           "hide": false,
           "legendFormat": "{{client_id}} - {{instance}}",
           "refId": "A"
@@ -938,6 +947,622 @@
       "timeRegions": [],
       "timeShift": null,
       "title": "Produce request rate",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "The average number of requests sent per second to the broker.\n",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 45
+      },
+      "id": 13,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "rate(kafka_producer_producer_metrics_response_total{job=\"producer\"}[1m])",
+          "hide": false,
+          "legendFormat": "{{client_id}} - {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Produce request rate",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "The average time in ms record batches spent in the send buffer.",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 54
+      },
+      "id": 14,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "kafka_producer_producer_metrics_record_queue_time_avg{job=\"producer\"}",
+          "hide": false,
+          "legendFormat": "{{client_id}} - {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Request queue average time",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "The average record size",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 54
+      },
+      "id": 15,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "kafka_producer_producer_metrics_record_size_avg{job=\"producer\"}",
+          "hide": false,
+          "legendFormat": "{{client_id}} - {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Record size average",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "The current number of in-flight requests awaiting a response.",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 63
+      },
+      "id": 16,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "kafka_producer_producer_metrics_requests_in_flight{job=\"producer\"}",
+          "hide": false,
+          "legendFormat": "{{client_id}} - {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Request in flight",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "The age in seconds of the current producer metadata being used.",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 63
+      },
+      "id": 17,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "kafka_producer_producer_metrics_metadata_age{job=\"producer\"}",
+          "hide": false,
+          "legendFormat": "{{client_id}} - {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Metadata max age",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "The average time in ms a request was throttled by a broker",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 72
+      },
+      "id": 18,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "kafka_producer_producer_metrics_produce_throttle_time_avg{job=\"producer\"}",
+          "hide": false,
+          "legendFormat": "{{client_id}} - {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Produce request throttle average",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "The total amount of buffer memory that is not being used (either unallocated or in the free list).",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 72
+      },
+      "id": 19,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "kafka_producer_producer_metrics_buffer_available_bytes{job=\"producer\"}",
+          "hide": false,
+          "legendFormat": "{{client_id}} - {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Buffer size available",
       "tooltip": {
         "shared": true,
         "sort": 0,
