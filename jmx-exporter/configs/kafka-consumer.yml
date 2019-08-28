@@ -7,12 +7,19 @@ rules:
     client-id: $1
     $2: $3
   type: UNTYPED
-- pattern : 'kafka.consumer<type=(.+), client-id=(.+), node-id=([0-9]+)><>(.+):'
+- pattern : 'kafka.consumer<type=(.+), client-id=(.+), node-id=(.+)><>(.+):'
   name: kafka_consumer_$1_$4
   type: GAUGE
   labels:
     client-id: "$2"
     host-id: "$3"
+- pattern : 'kafka.consumer<type=(.+), client-id=(.+), topic=(.+), partition=(.+)><>(.+):'
+  name: kafka_consumer_$1_$5
+  type: GAUGE
+  labels:
+    client-id: "$2"
+    topic: "$3"
+    partition: "$4"
 - pattern : 'kafka.consumer<type=(.+), client-id=(.+), topic=(.+)><>(.+):'
   name: kafka_consumer_$1_$4
   type: GAUGE
