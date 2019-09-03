@@ -150,6 +150,8 @@ services:
 
   grafana:
     image: grafana/grafana:6.3.0
+    environment:
+      GF_INSTALL_PLUGINS: grafana-piechart-panel
     ports:
       - 3000:3000
     volumes:
