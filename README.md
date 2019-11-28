@@ -66,3 +66,40 @@ Open a new terminal window and generate random messages to simulate consumer loa
 docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-consumer-perf-test --messages 100000000 --threads 1 --topic demo-perf-topic --broker-list localhost:9092 --timeout 60000'
 ```
 
+
+## Dashboards
+
+
+### Kafka Dashboard
+
+![Kafka 1](./images/kafka1.jpg)
+
+![Throughput](./images/kafka2.jpg)
+
+
+### Producer Dashboard
+
+![System](./images/producer1.jpg)
+
+![Throughput](./images/producer2.jpg)
+
+![Performance](./images/producer3.jpg)
+
+![Produce Request Metrics](./images/producer4.jpg)
+
+![Connections](./images/producer5.jpg)
+
+![Errors & Retries and Misc](./images/producer6.jpg)
+
+
+### Consumer Dashboard
+
+![Consumer](./images/consumer1.jpg)
+
+### Consumer Lag Dashboard
+
+This is using [kafka-lag-exporter](https://github.com/lightbend/kafka-lag-exporter) in order to pull consumer lags metrics from kafka cluster and be exported to Prometheus.
+
+![Consumer Lag 1](./images/consumerlag1.jpg)
+
+![Consumer Lag 2](./images/consumerlag2.jpg)
