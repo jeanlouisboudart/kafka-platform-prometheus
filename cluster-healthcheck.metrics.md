@@ -103,9 +103,9 @@ The latency is the amount of time it takes for the server to respond to a client
   * Notify when `ZooKeeperDisconnectsPerSec > X`
 
 ## Bonus: Why I don't have to monitor the number of brokers?
-You can be surprised to not see the number of brokers has a monitoring point. Think about it, what can occur you loose a broker>
+You can be surprised to not see the number of brokers has a monitoring point. Think about it, what can occur you loose a broker.
 * The producers will be blocked because the min.isr criterias is not satisfied? The UnderMinInSyncReplicas alert will be triggered.
 * You can't guarantee the durability of the messages: Under Replicated? The UnderReplicatedPartitions alert will be triggered.
 * You will have performance issue? The BrokeActivity(IO and/or Net) will be trigered.
 
-Your Kafka cluster is shaped to meet one or many of the Kafka key features (speed, delivery, resilience, etc.). While having the number of brokers is a good information it's redundant details to build a health check monitoring vision. 
+Your Kafka cluster is shaped to meet one or many of the Kafka key features (speed, durability, resilience, etc.). While having the number of brokers is a good information it's redundant details to build a health check monitoring vision. 
