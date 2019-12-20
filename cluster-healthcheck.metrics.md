@@ -1,4 +1,4 @@
-# The 10 most important cluster monitoring points
+# The more important cluster monitoring points
 
 1. [Active Controller count](#active-controller-count)
 2. [Offline partitions](#offline-partitions)
@@ -12,7 +12,7 @@
 10. [Zookeper Connections](#zookeeper-connections)
 11. [Broker Zookeeper disconnections](#broker-zookeeper-disconnections)
 
-[Bonus: Why I don't have to monitor the number of brokers?](#)
+[Bonus: Why I don't have to monitor the number of brokers?](#bonus-why-i-dont-have-to-monitor-the-number-of-brokers)
 
 ## Active Controller count
 * **Type**: Message Delivery
