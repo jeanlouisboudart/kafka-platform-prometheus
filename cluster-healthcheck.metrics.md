@@ -1,23 +1,18 @@
-# The 12 most important cluster monitoring points
+# The 10 most important cluster monitoring points
 
-1. [Broker count](#broker-count)
-2. [Active Controller count](#active-controller-count)
-3. [Offline partitions](#offline-partitions)
-4. [Unclean Elections](#unclean-elections)
-5. [Under Replicated Partitions](#under-replicated-partitions)
-6. [Under Min In Sync Replicas](#under-min-in-sync-replicas)
-7. [Max lag by groupId by partition](#max-lag-by-groupid-by-partition)
-8. [Broker IO Activity](#broker-io-activity)
-9. [Broker Net Activity](#broker-network-activity)
+1. [Active Controller count](#active-controller-count)
+2. [Offline partitions](#offline-partitions)
+3. [Unclean Elections](#unclean-elections)
+4. [Under Replicated Partitions](#under-replicated-partitions)
+5. [Under Min In Sync Replicas](#under-min-in-sync-replicas)
+6. [Max lag by groupId by partition](#max-lag-by-groupid-by-partition)
+7. [Broker IO Activity](#broker-io-activity)
+8. [Broker Net Activity](#broker-network-activity)
 9. [Zookeper Avg Latency](#zookeeper-avg-latency)
 10. [Zookeper Connections](#zookeeper-connections)
 11. [Broker Zookeeper disconnections](#broker-zookeeper-disconnections)
 
-## Broker count
-* **Type**: Cluster Health/Message Delivery
-* **Description**: The number of Kafka broker in you cluster has a direct impact on the business reliability you want to guarantee. When `min.isr` set and `count of broker < min.isr`, the the data production is stopped and the producers start a retry period before timing out or worse reach the limits of the hosting machine.
-* **Metric**: When collecting broker metrics, get the host cardinality.
-* **Notification**: Alarm when `count of broker < min(producer min.isr)`
+[Bonus: Why I don't have to monitor the number of brokers?](#)
 
 ## Active Controller count
 * **Type**: Message Delivery
@@ -76,7 +71,7 @@ _Note: Thread scaling should be done carefully since it can have huge impact on 
 
 ## Broker Network activity
 * **Type**: Performance
-* **Description**: Same as above, a broker node use the `Network Thread`to read a message from the network and place it into the `Request Queue`.. It's interesting to monitor the thread idle ("Idle" means not active):
+* **Description**: Same as above, a broker node use the `Network Thread`to read a message from the network and place it into the `Request Queue`. It's interesting to monitor the thread idle ("Idle" means not active):
   * When `idle==1`: The broker has no inbound traffic, from a pure performance stand point it could be removed.
   * When `idle==0`: The broker is always receiving messages , you should either increase the number of threads or add a new broker into the cluster.
 
@@ -106,3 +101,11 @@ The latency is the amount of time it takes for the server to respond to a client
 * **Metric**: JMX `kafka.server:type=SessionExpireListener,name=ZooKeeperDisconnectsPerSec`
 * **Notification**: 
   * Notify when `ZooKeeperDisconnectsPerSec > X`
+
+## Bonus: Why I don't have to monitor the number of brokers?
+You can be surprised to not see the number of brokers has a monitoring point. Think about it, what can occur you loose a broker>
+* The producers will be blocked because the min.isr criterias is not satisfied? The UnderMinInSyncReplicas alert will be triggered.
+* You can't guarantee the durability of the messages: Under Replicated? The UnderReplicatedPartitions alert will be triggered.
+* You will have performance issue? The BrokeActivity(IO and/or Net) will be trigered.
+
+Your Kafka cluster is shaped to meet one or many of the Kafka key features (speed, delivery, resilience, etc.). While having the number of brokers is a good information it's redundant details to build a health check monitoring vision. 
