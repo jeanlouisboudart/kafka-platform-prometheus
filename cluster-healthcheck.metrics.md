@@ -76,7 +76,7 @@ _Note: Thread scaling should be done carefully since it can have huge impact on 
   * When `idle==0`: The broker is always receiving messages , you should either increase the number of threads or add a new broker into the cluster.
 
 _Note: Thread scaling should be done carefully since it can have huge impact on the overall node performance._
-* **Metric**: JMX kafka.network:type=SocketServer,name=NetworkProcessorAvgIdlePercent`
+* **Metric**: JMX `kafka.network:type=SocketServer,name=NetworkProcessorAvgIdlePercent`
   *  **Notification**: Alarm when `NetworkProcessorAvgIdlePercent < 0.4`
 
 ## Zookeper Avg Latency
