@@ -163,6 +163,16 @@ services:
       - '--collector.filesystem.ignored-mount-points'
       - '^(aufs|proc|nsfs|shm|cgroup|tmpfs|binfmt_misc|debugfs|devpts|fusectl|hugetlbfs|fuse.lxcfs|mqueue|pstore|securityfs|sysfs|autofs|devtmpfs|configfs)'
 
+  kafka-lag-exporter:
+    image: lightbend/kafka-lag-exporter:0.5.5
+    hostname: kafka-lag-exporter
+    restart: always
+    ports:
+      - 9999:9999
+    volumes:
+      - ./kafka-lag-exporter/application.conf:/opt/docker/conf/application.conf
+      - ./kafka-lag-exporter/logback.xml:/opt/docker/conf/logback.xml
+
   grafana:
     image: grafana/grafana:6.3.0
     environment:

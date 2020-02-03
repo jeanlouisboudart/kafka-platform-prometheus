@@ -7,7 +7,7 @@ rules:
       client-id: $1
       $2: $3
     type: COUNTER
-  - pattern : 'kafka.producer<type=(.+), client-id=(.+), node-id=([0-9]+)><>(.+):'
+  - pattern : 'kafka.producer<type=(.+), client-id=(.+), node-id=(node-[0-9]+)><>(.+):'
     name: kafka_producer_$1_$4
     type: GAUGE
     labels:
