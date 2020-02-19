@@ -11,6 +11,9 @@ import java.util.concurrent.TimeUnit;
 
 public class SimpleProducer {
     public static void main(String[] args) throws InterruptedException {
+
+        String topicName = "vf_workshop_1";
+
         Properties props = new Properties();
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-1:9092,kafka-2:9092,kafka-3:9092");
@@ -20,7 +23,7 @@ public class SimpleProducer {
         // props.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "prod-1");
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
                 "org.apache.kafka.common.serialization.StringSerializer");
-        System.out.println("Sending data to `sample` topic");
+        System.out.println("Sending data to"+ topicName +  "topic");
         try (Producer<Long, String> producer = new KafkaProducer<>(props)) {
 
             // init TX, otherwise sending will not work with idempotency
@@ -29,7 +32,7 @@ public class SimpleProducer {
 
             long i = 0;
             while (true) {
-                ProducerRecord<Long, String> record = new ProducerRecord<>("sample", i, "Value " + i);
+                ProducerRecord<Long, String> record = new ProducerRecord<>(topicName, i, "Value " + i);
                 System.out.println("Sending " + record.key() + " " + record.value());
                 try {
                     RecordMetadata rm = producer.send(record).get(100, TimeUnit.MILLISECONDS);

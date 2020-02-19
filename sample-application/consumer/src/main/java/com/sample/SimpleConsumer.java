@@ -1,21 +1,21 @@
 package com.sample;
 
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.*;
+import org.apache.kafka.common.TopicPartition;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 public class SimpleConsumer {
     public static void main(String[] args) {
         Properties props = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-1:9092,kafka-2:9092,kafka-3:9092");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19092,kafka-2:9092,kafka-3:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "simple-consumer");
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
-        props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read-committed");
+        props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
         props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, "300000"); // 300000 = 5 min by default
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
                 "org.apache.kafka.common.serialization.LongDeserializer");
@@ -23,7 +23,27 @@ public class SimpleConsumer {
                 "org.apache.kafka.common.serialization.StringDeserializer");
         KafkaConsumer<Long, String> consumer = new KafkaConsumer<>(props);
         System.out.println("Subscribing to `sample` topic");
-        consumer.subscribe(Arrays.asList("sample"));
+
+        ConsumerRebalanceListener listener = new ConsumerRebalanceListener() {
+
+            @Override
+            public void onPartitionsRevoked(Collection<TopicPartition> revokedPartitions) {
+                System.out.println("revoked"+ revokedPartitions.size() +"partitions");
+                for (TopicPartition p : revokedPartitions) {
+                    System.out.println("revoked partition:  " + p.topic() + ":" + p.partition());
+                }
+            }
+
+            @Override
+            public void onPartitionsAssigned(Collection<TopicPartition> assignedPartitions) {
+                System.out.println("assigned"+ assignedPartitions.size() +"partitions");
+                for (TopicPartition p : assignedPartitions) {
+                    System.out.println("assigned partition:  " + p.topic() + ":" + p.partition());
+                }
+            }
+        };
+
+        consumer.subscribe(Pattern.compile("vf_workshop.*"));
         long lastKey = 0L;
         while (true) {
             ConsumerRecords<Long, String> records = consumer.poll(Duration.ofMillis(100));
@@ -40,7 +60,6 @@ public class SimpleConsumer {
 
                 System.out.println("Received offset = " + record.offset() + ", key = " + record.key() + ", value = "
                         + record.value());
-
             }
             try {
                 consumer.commitSync();
