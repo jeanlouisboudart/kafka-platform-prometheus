@@ -17,11 +17,16 @@ public class SimpleProducer {
         props.put(ProducerConfig.ACKS_CONFIG, "all");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.LongSerializer");
         props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
-        props.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "prod-1");
+        // props.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "prod-1");
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
                 "org.apache.kafka.common.serialization.StringSerializer");
         System.out.println("Sending data to `sample` topic");
         try (Producer<Long, String> producer = new KafkaProducer<>(props)) {
+
+            // init TX, otherwise sending will not work with idempotency
+            // Cannot perform a 'send' before completing a call to initTransactions when transactions are enabled
+            // producer.initTransactions();
+
             long i = 0;
             while (true) {
                 ProducerRecord<Long, String> record = new ProducerRecord<>("sample", i, "Value " + i);
@@ -32,9 +37,8 @@ public class SimpleProducer {
                 } catch (Exception e) {
                     System.out.println("failed sending " + record.key() + ": " + e.getMessage());
                 }
-
                 i++;
-                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.MILLISECONDS.sleep(1);
             }
         }
     }

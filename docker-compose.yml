@@ -9,6 +9,8 @@ services:
   zookeeper-1:
     image: confluentinc/cp-zookeeper
     hostname: zookeeper-1
+    ports:
+      - 12181:2181
     environment:
       ZOOKEEPER_SERVER_ID: "1"
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -23,6 +25,8 @@ services:
   zookeeper-2:
     image: confluentinc/cp-zookeeper
     hostname: zookeeper-2
+    ports:
+      - 12182:2181
     environment:
       ZOOKEEPER_SERVER_ID: "2"
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -37,6 +41,8 @@ services:
   zookeeper-3:
     image: confluentinc/cp-zookeeper
     hostname: zookeeper-3
+    ports:
+      - 12183:2181
     environment:
       ZOOKEEPER_SERVER_ID: "3"
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -49,7 +55,7 @@ services:
     - jmx-exporter
 
   kafka-1:
-    image: confluentinc/cp-kafka
+    image: confluentinc/cp-kafka:5.4.0
     hostname: kafka-1
     ports:
       - 19092:19092
@@ -71,7 +77,7 @@ services:
     - jmx-exporter-vol:/usr/share/jmx_exporter/
 
   kafka-2:
-    image: confluentinc/cp-kafka
+    image: confluentinc/cp-kafka:5.4.0
     hostname: kafka-2
     ports:
       - 19093:9092
@@ -93,7 +99,7 @@ services:
     - jmx-exporter-vol:/usr/share/jmx_exporter/
 
   kafka-3:
-    image: confluentinc/cp-kafka
+    image: confluentinc/cp-kafka:5.4.0
     hostname: kafka-3
     ports:
       - 19094:9092
