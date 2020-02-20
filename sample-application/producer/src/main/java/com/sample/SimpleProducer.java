@@ -6,6 +6,8 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -41,12 +43,13 @@ public class SimpleProducer {
             long i = 0;
             while (true) {
                 ProducerRecord<Long, String> record = new ProducerRecord<>(topicName, i, "Value " + i);
-                System.out.println("Sending " + record.key() + " " + record.value() + topicName);
+                LocalDateTime now = LocalDateTime.now();
+                System.out.println( now + "Sending " + record.key() + " " + record.value() + topicName);
                 try {
                     RecordMetadata rm = producer.send(record).get(100, TimeUnit.MILLISECONDS);
                     System.out.println("success. offset: " + rm.offset());
                 } catch (Exception e) {
-                    System.out.println("failed sending " + record.key() + ": " + e.getMessage());
+                    System.out.println(now + "failed sending " + record.key() + ": " + e.getMessage());
                 }
                 i++;
                 TimeUnit.MILLISECONDS.sleep(1);

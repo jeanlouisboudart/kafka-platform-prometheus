@@ -4,6 +4,7 @@ import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Properties;
 import java.util.regex.Pattern;
@@ -56,24 +57,27 @@ public class SimpleConsumer {
         long lastKey = 0L;
         while (true) {
             ConsumerRecords<Long, String> records = consumer.poll(Duration.ofMillis(100));
+
+            LocalDateTime now = LocalDateTime.now();
+
             if (!records.isEmpty() && records.count() != 1) {
-                System.out.println("Received " + records.count());
+                System.out.println(now + "Received " + records.count());
             }
             for (ConsumerRecord<Long, String> record : records) {
 
                 if (record.key() - lastKey != 1L) {
                     System.out.println("---");
-                    System.out.println("KEY GAP FROM " + lastKey + " to " + record.key());
+                    System.out.println(now + "KEY GAP FROM " + lastKey + " to " + record.key());
                 }
                 lastKey = record.key();
 
-                System.out.println("Received offset = " + record.offset() + ", key = " + record.key() + ", value = "
+                System.out.println(now + "Received offset = " + record.offset() + ", key = " + record.key() + ", value = "
                         + record.value());
             }
             try {
                 consumer.commitSync();
             } catch (Exception e) {
-                System.out.println("failed to commit: " + e.getMessage());
+                System.out.println(now + "failed to commit: " + e.getMessage());
             }
         }
     }
