@@ -17,7 +17,7 @@ public class SimpleProducer {
         System.out.println("started with args");
         for (String a : args) {
             System.out.println(a);
-        }
+    }
 
         // String topicName = "vf_workshop_2";
 
@@ -41,7 +41,7 @@ public class SimpleProducer {
             long i = 0;
             while (true) {
                 ProducerRecord<Long, String> record = new ProducerRecord<>(topicName, i, "Value " + i);
-                System.out.println("Sending " + record.key() + " " + record.value());
+                System.out.println("Sending " + record.key() + " " + record.value() + topicName);
                 try {
                     RecordMetadata rm = producer.send(record).get(100, TimeUnit.MILLISECONDS);
                     System.out.println("success. offset: " + rm.offset());
