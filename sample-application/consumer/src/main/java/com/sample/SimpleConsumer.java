@@ -4,13 +4,20 @@ import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
 public class SimpleConsumer {
     public static void main(String[] args) {
+
+        String tP = (args.length == 0 ? "vf_workshop.*" : args[0] + ".*");
+
+        System.out.println("started with args");
+        for (String a : args) {
+            System.out.println(a);
+        }
+
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19092,kafka-2:9092,kafka-3:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "simple-consumer");
@@ -22,7 +29,9 @@ public class SimpleConsumer {
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                 "org.apache.kafka.common.serialization.StringDeserializer");
         KafkaConsumer<Long, String> consumer = new KafkaConsumer<>(props);
-        System.out.println("Subscribing to `sample` topic");
+
+        //String topicPrefix = "vf_workshop.*";
+        System.out.println("Subscribing to " + tP + " prefix");
 
         ConsumerRebalanceListener listener = new ConsumerRebalanceListener() {
 
@@ -43,7 +52,7 @@ public class SimpleConsumer {
             }
         };
 
-        consumer.subscribe(Pattern.compile("vf_workshop.*"));
+        consumer.subscribe(Pattern.compile(tP));
         long lastKey = 0L;
         while (true) {
             ConsumerRecords<Long, String> records = consumer.poll(Duration.ofMillis(100));

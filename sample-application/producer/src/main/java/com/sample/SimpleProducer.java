@@ -12,7 +12,14 @@ import java.util.concurrent.TimeUnit;
 public class SimpleProducer {
     public static void main(String[] args) throws InterruptedException {
 
-        String topicName = "vf_workshop_1";
+        String topicName = (args.length == 0 ? "vf_workshop_1" : args[0]);
+
+        System.out.println("started with args");
+        for (String a : args) {
+            System.out.println(a);
+        }
+
+        // String topicName = "vf_workshop_2";
 
         Properties props = new Properties();
 
@@ -20,6 +27,7 @@ public class SimpleProducer {
         props.put(ProducerConfig.ACKS_CONFIG, "all");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.LongSerializer");
         props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
+        props.put(ProducerConfig.RETRIES_CONFIG, "1");
         // props.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "prod-1");
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
                 "org.apache.kafka.common.serialization.StringSerializer");
