@@ -7,7 +7,6 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -21,15 +20,15 @@ public class SimpleProducer {
             System.out.println(a);
     }
 
-        // String topicName = "vf_workshop_2";
-
         Properties props = new Properties();
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-1:9092,kafka-2:9092,kafka-3:9092");
         props.put(ProducerConfig.ACKS_CONFIG, "all");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.LongSerializer");
         props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
-        props.put(ProducerConfig.RETRIES_CONFIG, "1");
+        props.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "5");
+        props.put(ProducerConfig.RETRIES_CONFIG, "10"); // default: Int.MAX_VALUE
+        props.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, "1000"); // default: 120000
         // props.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "prod-1");
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
                 "org.apache.kafka.common.serialization.StringSerializer");
