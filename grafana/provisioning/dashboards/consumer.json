@@ -312,9 +312,9 @@
       "stack": false,
       "steppedLine": false,
       "targets": [{
-        "expr": "rate(kafka_consumer_consumer_fetch_manager_metrics_records_consumed_total{job=\"consumer\", topic!=\"\"}[1m])",
+        "expr": "sum by (topic, instance) (rate(kafka_consumer_consumer_fetch_manager_metrics_records_consumed_total{job=\"consumer\", topic!=\"\"}[1m]))",
         "instant": false,
-        "legendFormat": "{{client_id}}-{{topic}}",
+        "legendFormat": "{{instance}}-{{topic}}",
         "refId": "B"
       }],
       "thresholds": [],
@@ -399,7 +399,7 @@
       "targets": [{
         "expr": "kafka_consumer_consumer_fetch_manager_metrics_records_lag_avg{job=\"consumer\"}",
         "hide": false,
-        "legendFormat": "{{client_id}}-{{topic}}-{{partition}}",
+        "legendFormat": "{{instance}}-{{topic}}-{{partition}}",
         "refId": "A"
       }],
       "thresholds": [],
