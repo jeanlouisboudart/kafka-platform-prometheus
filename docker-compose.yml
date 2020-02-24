@@ -15,6 +15,7 @@ services:
       ZOOKEEPER_SERVER_ID: "1"
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
+      ZOOKEEPER_4LW_COMMANDS_WHITELIST: "*"
       EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
     volumes:
@@ -31,6 +32,7 @@ services:
       ZOOKEEPER_SERVER_ID: "2"
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
+      ZOOKEEPER_4LW_COMMANDS_WHITELIST: "*"
       EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
     volumes:
@@ -47,6 +49,7 @@ services:
       ZOOKEEPER_SERVER_ID: "3"
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
+      ZOOKEEPER_4LW_COMMANDS_WHITELIST: "*"
       EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
     volumes:
