@@ -139,8 +139,35 @@ services:
       - kafka-2
       - kafka-3
 
-  consumer:
+  consumer-1:
     build: ./sample-application/consumer
+    hostname: consumer-1
+    environment:
+      JAVA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-consumer.yml -Xmx256M -Xms256M
+    volumes:
+      - jmx-exporter-vol:/usr/share/jmx_exporter/
+    depends_on:
+      - jmx-exporter
+      - kafka-1
+      - kafka-2
+      - kafka-3
+
+  consumer-2:
+    build: ./sample-application/consumer
+    hostname: consumer-2
+    environment:
+      JAVA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-consumer.yml -Xmx256M -Xms256M
+    volumes:
+      - jmx-exporter-vol:/usr/share/jmx_exporter/
+    depends_on:
+      - jmx-exporter
+      - kafka-1
+      - kafka-2
+      - kafka-3
+
+  consumer-3:
+    build: ./sample-application/consumer
+    hostname: consumer-3
     environment:
       JAVA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-consumer.yml -Xmx256M -Xms256M
     volumes:
