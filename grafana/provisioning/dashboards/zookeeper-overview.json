@@ -80,16 +80,14 @@
         "ymin": null
       },
       "tableColumn": "",
-      "targets": [
-        {
-          "expr": "avg(zookeeper_quorumsize)",
-          "refId": "A"
-        }
-      ],
+      "targets": [{
+        "expr": "count(zookeeper_quorumsize)",
+        "refId": "A"
+      }],
       "thresholds": "2,3",
       "timeFrom": null,
       "timeShift": null,
-      "title": "Quorum Size",
+      "title": "Zookeeper nodes online",
       "type": "singlestat",
       "valueFontSize": "200%",
       "valueMaps": [
