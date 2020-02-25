@@ -28,6 +28,7 @@ public class SimpleProducer {
         props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
         props.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "5");
         props.put(ProducerConfig.RETRIES_CONFIG, "10"); // default: Int.MAX_VALUE
+        props.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, "900"); // default: 120000
         props.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, "1000"); // default: 120000
         // props.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "prod-1");
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
