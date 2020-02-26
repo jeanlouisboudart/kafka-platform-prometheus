@@ -29,8 +29,9 @@ public class SimpleConsumer {
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19092,kafka-2:9092,kafka-3:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "simple-consumer");
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
-        props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false"); // default true if group.id is provided
+        props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed"); // default read_uncommitted
+        // default: org.apache.kafka.clients.consumer.RangeAssignor
         props.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, CooperativeStickyAssignor.class.getName());
         props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, "300000"); // 300000 = 5 min by default
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
