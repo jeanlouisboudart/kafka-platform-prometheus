@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class SimpleProducer {
     public static void main(String[] args) throws InterruptedException {
 
-        String topicName = (args.length == 0 ? "vf_workshop_1" : args[0]);
+        String topicName = (args.length == 0 ? "workshop_topic_1" : args[0]);
 
         System.out.println("started with args");
         for (String a : args) {

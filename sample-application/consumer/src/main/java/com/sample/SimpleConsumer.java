@@ -15,14 +15,14 @@ public class SimpleConsumer {
 
         Options options = new Options();
         options.addOption("t", true, "topic name");
-        options.addOption("g", false, "check gaps");
+        options.addOption("g", false, "check msg keys for gaps");
         options.addOption("v", false, "log batches and individual records");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse( options, args);
         cmd.iterator().forEachRemaining(System.out::println);
 
-        String tP = cmd.getOptionValue("t",  "vf_workshop") + ".*";
+        String tP = cmd.getOptionValue("t",  "workshop_topic_1") + ".*";
         boolean checkGaps = cmd.hasOption("g");
         boolean verbose = cmd.hasOption("v");
 
@@ -39,12 +39,10 @@ public class SimpleConsumer {
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                 "org.apache.kafka.common.serialization.StringDeserializer");
 
-        System.out.println("starting consumer with following config");
+        System.out.println("creating consumer with following config:");
         props.forEach((k, v) -> System.out.println(k + ": " + v));
 
         KafkaConsumer<Long, String> consumer = new KafkaConsumer<>(props);
-
-        System.out.println("Subscribing to " + tP + " prefix");
 
         ConsumerRebalanceListener listener = new ConsumerRebalanceListener() {
 
@@ -65,6 +63,7 @@ public class SimpleConsumer {
             }
         };
 
+        System.out.println("Subscribing to " + tP + " prefix");
         consumer.subscribe(Pattern.compile(tP), listener);
         long lastKey = 0L;
         while (true) {
