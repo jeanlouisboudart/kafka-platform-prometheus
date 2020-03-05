@@ -19,10 +19,10 @@ public class SimpleConsumer {
         options.addOption("v", false, "log batches and individual records");
 
         CommandLineParser parser = new DefaultParser();
-        CommandLine cmd = parser.parse( options, args);
+        CommandLine cmd = parser.parse(options, args);
         cmd.iterator().forEachRemaining(System.out::println);
 
-        String tP = cmd.getOptionValue("t",  "workshop_topic_1") + ".*";
+        String tP = cmd.getOptionValue("t", "workshop_topic_1") + ".*";
         boolean checkGaps = cmd.hasOption("g");
         boolean verbose = cmd.hasOption("v");
 
@@ -48,7 +48,7 @@ public class SimpleConsumer {
 
             @Override
             public void onPartitionsRevoked(Collection<TopicPartition> revokedPartitions) {
-                System.out.println("rebalance: revoked "+ revokedPartitions.size() +" partitions");
+                System.out.println("rebalance: revoked " + revokedPartitions.size() + " partitions");
                 for (TopicPartition p : revokedPartitions) {
                     System.out.println("rebalance: revoked  " + p.topic() + ":" + p.partition());
                 }
@@ -56,7 +56,7 @@ public class SimpleConsumer {
 
             @Override
             public void onPartitionsAssigned(Collection<TopicPartition> assignedPartitions) {
-                System.out.println("rebalance: assigned "+ assignedPartitions.size() +" partitions");
+                System.out.println("rebalance: assigned " + assignedPartitions.size() + " partitions");
                 for (TopicPartition p : assignedPartitions) {
                     System.out.println("rebalance: assigned  " + p.topic() + ":" + p.partition());
                 }
@@ -83,8 +83,9 @@ public class SimpleConsumer {
                 }
                 lastKey = record.key();
 
-                if( verbose ) System.out.println(now + " Received " + rp + " offset = " + record.offset() + ", key = " + record.key() + ", value = "
-                        + record.value());
+                if (verbose)
+                    System.out.println(now + " Received " + rp + " offset = " + record.offset() + ", key = "
+                            + record.key() + ", value = " + record.value());
             }
             try {
                 consumer.commitSync();

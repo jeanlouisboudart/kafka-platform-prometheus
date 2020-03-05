@@ -3,14 +3,11 @@
 FROM maven:latest as mavenBuild
 WORKDIR /app
 COPY pom.xml .
-# 
-RUN --mount=type=cache,target=/root/.m2 \
-  mvn dependency:resolve-plugins && \
-  mvn dependency:resolve && \
-  mvn dependency:go-offline
+# To resolve dependencies in a safe way (no re-download when the source code changes)
+RUN  mvn clean package -Dmaven.main.skip -Dmaven.test.skip && rm -r target
 # Copy all other project files and build project
 COPY src ./src
-RUN mvn -B package -Dmaven.test.skip
+RUN mvn clean package -Dmaven.test.skip
 
 FROM java:8
 WORKDIR /app
