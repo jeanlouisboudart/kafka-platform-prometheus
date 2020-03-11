@@ -1,0 +1,18 @@
+version: "3"
+services:
+  consumer:
+    build: ./sample-application/consumer
+    hostname: consumer
+    environment:
+      JAVA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-consumer.yml -Xmx256M -Xms256M
+      KAFKA_ENABLE_AUTO_COMMIT_CONFIG: "false" # default true if group.id is provided
+      KAFKA_ISOLATION_LEVEL_CONFIG: "read_committed" # default read_uncommitted
+      # default: org.apache.kafka.clients.consumer.RangeAssignor
+      KAFKA_PARTITION_ASSIGNMENT_STRATEGY_CONFIG: "org.apache.kafka.clients.consumer.CooperativeStickyAssignor"
+    volumes:
+      - jmx-exporter-vol:/usr/share/jmx_exporter/
+    depends_on:
+      - jmx-exporter
+      - kafka-1
+      - kafka-2
+      - kafka-3
