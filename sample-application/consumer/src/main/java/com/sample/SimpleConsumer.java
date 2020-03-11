@@ -7,29 +7,22 @@ import org.apache.kafka.common.TopicPartition;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class SimpleConsumer {
+
+    private static final String KAFKA_ENV_PREFIX = "KAFKA_";
+
     public static void main(String[] args) throws ParseException {
 
         SimpleConsumerOptions opts = new SimpleConsumerOptions(args);
 
-        Properties props = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19092,kafka-2:9092,kafka-3:9092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "simple-consumer");
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false"); // default true if group.id is provided
-        props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed"); // default read_uncommitted
-        // default: org.apache.kafka.clients.consumer.RangeAssignor
-        props.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, CooperativeStickyAssignor.class.getName());
-        props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, "300000"); // 300000 = 5 min by default
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-                "org.apache.kafka.common.serialization.LongDeserializer");
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                "org.apache.kafka.common.serialization.StringDeserializer");
-
-        System.out.println("creating consumer with following config:");
-        props.forEach((k, v) -> System.out.println(k + ": " + v));
+        Properties props = buildProperties(defaultProps, System.getenv(), KAFKA_ENV_PREFIX);
+        System.out.println("creating consumer with props:");
+        props.forEach( (k, v) -> System.out.println(k + ": " + v));
 
         KafkaConsumer<Long, String> consumer = new KafkaConsumer<>(props);
 
@@ -83,4 +76,28 @@ public class SimpleConsumer {
             }
         }
     };
+
+    private static Map<String, String> defaultProps = Map.of(
+            ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-1:9092,kafka-2:9092,kafka-3:9092",
+            ConsumerConfig.GROUP_ID_CONFIG, "simple-consumer",
+            ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.LongDeserializer",
+            ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
+
+    private static Properties buildProperties(Map<String, String> baseProps, Map<String, String> envProps, String prefix) {
+        Map<String, String> systemProperties = envProps.entrySet()
+                .stream()
+                .filter(e -> e.getKey().startsWith(prefix))
+                .collect(Collectors.toMap(
+                        e -> e.getKey()
+                                .replace(prefix, "")
+                                .toLowerCase()
+                                .replace("_", ".")
+                        , e -> e.getValue())
+                );
+
+        Properties props = new Properties();
+        props.putAll(baseProps);
+        props.putAll(systemProperties);
+        return props;
+    }
 }
