@@ -1,13 +1,13 @@
-FROM maven:latest as mavenBuild
+FROM maven:3.6.3-jdk-11 as mavenBuild
 WORKDIR /app
 COPY pom.xml .
 # To resolve dependencies in a safe way (no re-download when the source code changes)
-RUN  mvn clean package -Dmaven.main.skip -Dmaven.test.skip && rm -r target
+RUN mvn dependency:go-offline -B
 # Copy all other project files and build project
-COPY src ./src
-RUN mvn clean package -Dmaven.test.skip
+COPY src src
+RUN mvn clean package -Dmaven.test.skip -B
 
-FROM java:8
+FROM java:9
 WORKDIR /app
 COPY --from=mavenBuild ./app/target/*.jar ./
 ENV JAVA_OPTS ""
