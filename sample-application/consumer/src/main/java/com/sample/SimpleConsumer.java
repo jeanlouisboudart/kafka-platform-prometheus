@@ -13,18 +13,7 @@ import java.util.regex.Pattern;
 public class SimpleConsumer {
     public static void main(String[] args) throws ParseException {
 
-        Options options = new Options();
-        options.addOption("t", true, "topic name");
-        options.addOption("g", false, "check msg keys for gaps");
-        options.addOption("v", false, "log batches and individual records");
-
-        CommandLineParser parser = new DefaultParser();
-        CommandLine cmd = parser.parse(options, args);
-        cmd.iterator().forEachRemaining(System.out::println);
-
-        String tP = cmd.getOptionValue("t", "workshop_topic_1") + ".*";
-        boolean checkGaps = cmd.hasOption("g");
-        boolean verbose = cmd.hasOption("v");
+        SimpleConsumerOptions opts = new SimpleConsumerOptions(args);
 
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19092,kafka-2:9092,kafka-3:9092");
@@ -44,46 +33,27 @@ public class SimpleConsumer {
 
         KafkaConsumer<Long, String> consumer = new KafkaConsumer<>(props);
 
-        ConsumerRebalanceListener listener = new ConsumerRebalanceListener() {
-
-            @Override
-            public void onPartitionsRevoked(Collection<TopicPartition> revokedPartitions) {
-                System.out.println("rebalance: revoked " + revokedPartitions.size() + " partitions");
-                for (TopicPartition p : revokedPartitions) {
-                    System.out.println("rebalance: revoked  " + p.topic() + ":" + p.partition());
-                }
-            }
-
-            @Override
-            public void onPartitionsAssigned(Collection<TopicPartition> assignedPartitions) {
-                System.out.println("rebalance: assigned " + assignedPartitions.size() + " partitions");
-                for (TopicPartition p : assignedPartitions) {
-                    System.out.println("rebalance: assigned  " + p.topic() + ":" + p.partition());
-                }
-            }
-        };
-
-        System.out.println("Subscribing to " + tP + " prefix");
-        consumer.subscribe(Pattern.compile(tP), listener);
+        System.out.println("Subscribing to " + opts.topicName + " prefix");
+        consumer.subscribe(Pattern.compile(opts.topicName), listener);
         long lastKey = 0L;
         while (true) {
             ConsumerRecords<Long, String> records = consumer.poll(Duration.ofMillis(100));
 
             LocalDateTime now = LocalDateTime.now();
 
-            if (verbose && !records.isEmpty() && records.count() != 1) {
+            if (opts.verbose && !records.isEmpty() && records.count() != 1) {
                 System.out.println(now + " Received " + records.count());
             }
             for (ConsumerRecord<Long, String> record : records) {
                 String rp = record.topic() + "#" + record.partition();
 
-                if (checkGaps && record.key() - lastKey != 1L) {
+                if (opts.checkGaps && record.key() - lastKey != 1L) {
                     System.out.println("---");
                     System.out.println(now + " KEY GAP on " + rp + "FROM " + lastKey + " to " + record.key());
                 }
                 lastKey = record.key();
 
-                if (verbose)
+                if (opts.verbose)
                     System.out.println(now + " Received " + rp + " offset = " + record.offset() + ", key = "
                             + record.key() + ", value = " + record.value());
             }
@@ -94,4 +64,23 @@ public class SimpleConsumer {
             }
         }
     }
+
+    private static ConsumerRebalanceListener listener = new ConsumerRebalanceListener() {
+
+        @Override
+        public void onPartitionsRevoked(Collection<TopicPartition> revokedPartitions) {
+            System.out.println("rebalance: revoked " + revokedPartitions.size() + " partitions");
+            for (TopicPartition p : revokedPartitions) {
+                System.out.println("rebalance: revoked  " + p.topic() + ":" + p.partition());
+            }
+        }
+
+        @Override
+        public void onPartitionsAssigned(Collection<TopicPartition> assignedPartitions) {
+            System.out.println("rebalance: assigned " + assignedPartitions.size() + " partitions");
+            for (TopicPartition p : assignedPartitions) {
+                System.out.println("rebalance: assigned  " + p.topic() + ":" + p.partition());
+            }
+        }
+    };
 }
