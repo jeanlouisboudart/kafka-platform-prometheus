@@ -28,7 +28,7 @@ public class SimpleProducer {
         System.out.println("creating producer with props:");
         props.forEach( (k, v) -> System.out.println(k + ": " + v));
 
-        System.out.println("Sending data to" + topicName + "topic");
+        System.out.println("Sending data to topic " + topicName);
         try (Producer<Long, String> producer = new KafkaProducer<>(props)) {
 
             // init TX, otherwise sending will not work with idempotency
@@ -39,7 +39,7 @@ public class SimpleProducer {
             while (true) {
                 ProducerRecord<Long, String> record = new ProducerRecord<>(topicName, id, "Value " + id);
                 LocalDateTime now = LocalDateTime.now();
-                System.out.println(now + "Sending " + record.key() + " " + record.value() + topicName);
+                System.out.println(now + "Sending " + record.key() + " " + record.value() + " to " + topicName);
                 try {
                     RecordMetadata rm = producer.send(record).get(100, TimeUnit.MILLISECONDS);
                     System.out.println("succeeded sending. offset: " + rm.offset());
@@ -53,7 +53,7 @@ public class SimpleProducer {
     }
 
     private static Map<String, String> defaultProps = Map.of(
-            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-1:9092,kafka-2:9092,kafka-3:9092",
+            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19092,kafka-2:9092,kafka-3:9092",
             ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.LongSerializer",
             ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
 
