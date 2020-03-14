@@ -5,9 +5,9 @@ COPY pom.xml .
 RUN mvn dependency:go-offline -B
 # Copy all other project files and build project
 COPY src src
-RUN mvn clean package -Dmaven.test.skip -B
+RUN mvn clean install -Dmaven.test.skip -B
 
-FROM java:9
+FROM adoptopenjdk/openjdk11:ubi
 WORKDIR /app
 COPY --from=mavenBuild ./app/target/*.jar ./
 ENV JAVA_OPTS ""
