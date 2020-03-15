@@ -1,4 +1,4 @@
-version: "3"
+version: "2.4"
 services:
   consumer-1:
     build: ./sample-application/consumer
@@ -50,3 +50,98 @@ services:
       - kafka-1
       - kafka-2
       - kafka-3
+
+# extends from common compose.services.yml
+
+  jmx-exporter:
+    extends:
+      file: compose.services.yml
+      service: jmx-exporter
+
+  zookeeper-1:
+    extends:
+      file: compose.services.yml
+      service: zookeeper-1
+    depends_on:
+      - jmx-exporter
+  zookeeper-2:
+    extends:
+      file: compose.services.yml
+      service: zookeeper-2
+    depends_on:
+      - jmx-exporter
+
+  zookeeper-3:
+    extends:
+      file: compose.services.yml
+      service: zookeeper-3
+    depends_on:
+      - jmx-exporter
+
+  kafka-1:
+    extends:
+      file: compose.services.yml
+      service: kafka-1
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+      - jmx-exporter
+
+  kafka-2:
+    extends:
+      file: compose.services.yml
+      service: kafka-2
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+      - jmx-exporter
+
+  kafka-3:
+    extends:
+      file: compose.services.yml
+      service: kafka-3
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+      - jmx-exporter
+
+  producer:
+    extends:
+      file: compose.services.yml
+      service: producer
+    depends_on:
+      - jmx-exporter
+      - kafka-1
+      - kafka-2
+      - kafka-3
+
+  prometheus:
+    extends:
+      file: compose.services.yml
+      service: prometheus
+
+  alertmanager:
+    extends:
+      file: compose.services.yml
+      service: alertmanager
+
+  node-exporter:
+    extends:
+      file: compose.services.yml
+      service: node-exporter
+
+  kafka-lag-exporter:
+    extends:
+      file: compose.services.yml
+      service: kafka-lag-exporter
+
+  grafana:
+    extends:
+      file: compose.services.yml
+      service: grafana
+
+volumes:
+  jmx-exporter-vol: {}
