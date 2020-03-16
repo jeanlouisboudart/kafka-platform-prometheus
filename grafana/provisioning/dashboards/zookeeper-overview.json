@@ -1,24 +1,21 @@
 {
   "annotations": {
-    "list": [
-      {
-        "builtIn": 1,
-        "datasource": "-- Grafana --",
-        "enable": true,
-        "hide": true,
-        "iconColor": "rgba(0, 211, 255, 1)",
-        "name": "Annotations & Alerts",
-        "type": "dashboard"
-      }
-    ]
+    "list": [{
+      "builtIn": 1,
+      "datasource": "-- Grafana --",
+      "enable": true,
+      "hide": true,
+      "iconColor": "rgba(0, 211, 255, 1)",
+      "name": "Annotations & Alerts",
+      "type": "dashboard"
+    }]
   },
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
   "id": 3,
   "links": [],
-  "panels": [
-    {
+  "panels": [{
       "cacheTimeout": null,
       "colorBackground": false,
       "colorValue": true,
@@ -46,8 +43,7 @@
       "interval": null,
       "links": [],
       "mappingType": 1,
-      "mappingTypes": [
-        {
+      "mappingTypes": [{
           "name": "value to text",
           "value": 1
         },
@@ -64,13 +60,11 @@
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
+      "rangeMaps": [{
+        "from": "null",
+        "text": "N/A",
+        "to": "null"
+      }],
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -80,25 +74,21 @@
         "ymin": null
       },
       "tableColumn": "",
-      "targets": [
-        {
-          "expr": "avg(zookeeper_quorumsize)",
-          "refId": "A"
-        }
-      ],
+      "targets": [{
+        "expr": "count(zookeeper_quorumsize)",
+        "refId": "A"
+      }],
       "thresholds": "2,3",
       "timeFrom": null,
       "timeShift": null,
-      "title": "Quorum Size",
+      "title": "Zookeeper nodes online",
       "type": "singlestat",
       "valueFontSize": "200%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
+      "valueMaps": [{
+        "op": "=",
+        "text": "N/A",
+        "value": "null"
+      }],
       "valueName": "current"
     },
     {
@@ -129,8 +119,7 @@
       "interval": null,
       "links": [],
       "mappingType": 1,
-      "mappingTypes": [
-        {
+      "mappingTypes": [{
           "name": "value to text",
           "value": 1
         },
@@ -147,13 +136,11 @@
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
+      "rangeMaps": [{
+        "from": "null",
+        "text": "N/A",
+        "to": "null"
+      }],
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -163,55 +150,49 @@
         "ymin": null
       },
       "tableColumn": "",
-      "targets": [
-        {
-          "expr": "sum(zookeeper_numaliveconnections)",
-          "refId": "A"
-        }
-      ],
+      "targets": [{
+        "expr": "sum(zookeeper_numaliveconnections)",
+        "refId": "A"
+      }],
       "thresholds": "60,120",
       "timeFrom": null,
       "timeShift": null,
       "title": "Alive Connections",
       "type": "singlestat",
       "valueFontSize": "200%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
+      "valueMaps": [{
+        "op": "=",
+        "text": "N/A",
+        "value": "null"
+      }],
       "valueName": "current"
     },
     {
       "alert": {
         "alertRuleTags": {},
-        "conditions": [
-          {
-            "evaluator": {
-              "params": [
-                10
-              ],
-              "type": "gt"
-            },
-            "operator": {
-              "type": "and"
-            },
-            "query": {
-              "params": [
-                "A",
-                "5m",
-                "now"
-              ]
-            },
-            "reducer": {
-              "params": [],
-              "type": "avg"
-            },
-            "type": "query"
-          }
-        ],
+        "conditions": [{
+          "evaluator": {
+            "params": [
+              10
+            ],
+            "type": "gt"
+          },
+          "operator": {
+            "type": "and"
+          },
+          "query": {
+            "params": [
+              "A",
+              "5m",
+              "now"
+            ]
+          },
+          "reducer": {
+            "params": [],
+            "type": "avg"
+          },
+          "type": "query"
+        }],
         "executionErrorState": "alerting",
         "for": "0m",
         "frequency": "60s",
@@ -257,23 +238,19 @@
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
-      "targets": [
-        {
-          "expr": "zookeeper_outstandingrequests",
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [
-        {
-          "colorMode": "critical",
-          "fill": true,
-          "line": true,
-          "op": "gt",
-          "value": 10,
-          "yaxis": "left"
-        }
-      ],
+      "targets": [{
+        "expr": "zookeeper_outstandingrequests",
+        "legendFormat": "{{instance}}",
+        "refId": "A"
+      }],
+      "thresholds": [{
+        "colorMode": "critical",
+        "fill": true,
+        "line": true,
+        "op": "gt",
+        "value": 10,
+        "yaxis": "left"
+      }],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
@@ -291,8 +268,7 @@
         "show": true,
         "values": []
       },
-      "yaxes": [
-        {
+      "yaxes": [{
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -342,8 +318,7 @@
       "interval": null,
       "links": [],
       "mappingType": 1,
-      "mappingTypes": [
-        {
+      "mappingTypes": [{
           "name": "value to text",
           "value": 1
         },
@@ -360,13 +335,11 @@
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
+      "rangeMaps": [{
+        "from": "null",
+        "text": "N/A",
+        "to": "null"
+      }],
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -376,25 +349,21 @@
         "ymin": null
       },
       "tableColumn": "",
-      "targets": [
-        {
-          "expr": "avg(zookeeper_inmemorydatatree_nodecount)",
-          "refId": "A"
-        }
-      ],
+      "targets": [{
+        "expr": "avg(zookeeper_inmemorydatatree_nodecount)",
+        "refId": "A"
+      }],
       "thresholds": "500,800",
       "timeFrom": null,
       "timeShift": null,
       "title": "Number of ZNodes",
       "type": "singlestat",
       "valueFontSize": "200%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
+      "valueMaps": [{
+        "op": "=",
+        "text": "N/A",
+        "value": "null"
+      }],
       "valueName": "current"
     },
     {
@@ -425,8 +394,7 @@
       "interval": null,
       "links": [],
       "mappingType": 1,
-      "mappingTypes": [
-        {
+      "mappingTypes": [{
           "name": "value to text",
           "value": 1
         },
@@ -443,13 +411,11 @@
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
+      "rangeMaps": [{
+        "from": "null",
+        "text": "N/A",
+        "to": "null"
+      }],
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -459,25 +425,21 @@
         "ymin": null
       },
       "tableColumn": "",
-      "targets": [
-        {
-          "expr": "sum(zookeeper_inmemorydatatree_watchcount)",
-          "refId": "A"
-        }
-      ],
+      "targets": [{
+        "expr": "sum(zookeeper_inmemorydatatree_watchcount)",
+        "refId": "A"
+      }],
       "thresholds": "100,200",
       "timeFrom": null,
       "timeShift": null,
       "title": "Number of Watchers",
       "type": "singlestat",
       "valueFontSize": "200%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
+      "valueMaps": [{
+        "op": "=",
+        "text": "N/A",
+        "value": "null"
+      }],
       "valueName": "current"
     },
     {
@@ -518,13 +480,11 @@
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
-      "targets": [
-        {
-          "expr": "rate(process_cpu_seconds_total{job=\"zookeeper\"}[1m])",
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
+      "targets": [{
+        "expr": "rate(process_cpu_seconds_total{job=\"zookeeper\"}[1m])",
+        "legendFormat": "{{instance}}",
+        "refId": "A"
+      }],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
@@ -543,8 +503,7 @@
         "show": true,
         "values": []
       },
-      "yaxes": [
-        {
+      "yaxes": [{
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -604,13 +563,11 @@
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum without(area)(jvm_memory_bytes_used{job=\"zookeeper\"})",
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
+      "targets": [{
+        "expr": "sum without(area)(jvm_memory_bytes_used{job=\"zookeeper\"})",
+        "legendFormat": "{{instance}}",
+        "refId": "A"
+      }],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
@@ -629,8 +586,7 @@
         "show": true,
         "values": []
       },
-      "yaxes": [
-        {
+      "yaxes": [{
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -690,13 +646,11 @@
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"zookeeper\"}[5m]))",
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
+      "targets": [{
+        "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"zookeeper\"}[5m]))",
+        "legendFormat": "{{instance}}",
+        "refId": "A"
+      }],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
@@ -715,8 +669,7 @@
         "show": true,
         "values": []
       },
-      "yaxes": [
-        {
+      "yaxes": [{
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -776,13 +729,11 @@
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
-      "targets": [
-        {
-          "expr": "zookeeper_minrequestlatency",
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
+      "targets": [{
+        "expr": "zookeeper_minrequestlatency",
+        "legendFormat": "{{instance}}",
+        "refId": "A"
+      }],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
@@ -801,8 +752,7 @@
         "show": true,
         "values": []
       },
-      "yaxes": [
-        {
+      "yaxes": [{
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -827,31 +777,29 @@
     {
       "alert": {
         "alertRuleTags": {},
-        "conditions": [
-          {
-            "evaluator": {
-              "params": [
-                10
-              ],
-              "type": "gt"
-            },
-            "operator": {
-              "type": "and"
-            },
-            "query": {
-              "params": [
-                "A",
-                "5m",
-                "now"
-              ]
-            },
-            "reducer": {
-              "params": [],
-              "type": "avg"
-            },
-            "type": "query"
-          }
-        ],
+        "conditions": [{
+          "evaluator": {
+            "params": [
+              10
+            ],
+            "type": "gt"
+          },
+          "operator": {
+            "type": "and"
+          },
+          "query": {
+            "params": [
+              "A",
+              "5m",
+              "now"
+            ]
+          },
+          "reducer": {
+            "params": [],
+            "type": "avg"
+          },
+          "type": "query"
+        }],
         "executionErrorState": "alerting",
         "for": "0m",
         "frequency": "60s",
@@ -897,22 +845,18 @@
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
-      "targets": [
-        {
-          "expr": "zookeeper_avgrequestlatency",
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [
-        {
-          "colorMode": "critical",
-          "fill": true,
-          "line": true,
-          "op": "gt",
-          "value": 10
-        }
-      ],
+      "targets": [{
+        "expr": "zookeeper_avgrequestlatency",
+        "legendFormat": "{{instance}}",
+        "refId": "A"
+      }],
+      "thresholds": [{
+        "colorMode": "critical",
+        "fill": true,
+        "line": true,
+        "op": "gt",
+        "value": 10
+      }],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
@@ -930,8 +874,7 @@
         "show": true,
         "values": []
       },
-      "yaxes": [
-        {
+      "yaxes": [{
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -956,31 +899,29 @@
     {
       "alert": {
         "alertRuleTags": {},
-        "conditions": [
-          {
-            "evaluator": {
-              "params": [
-                20
-              ],
-              "type": "gt"
-            },
-            "operator": {
-              "type": "and"
-            },
-            "query": {
-              "params": [
-                "A",
-                "5m",
-                "now"
-              ]
-            },
-            "reducer": {
-              "params": [],
-              "type": "avg"
-            },
-            "type": "query"
-          }
-        ],
+        "conditions": [{
+          "evaluator": {
+            "params": [
+              20
+            ],
+            "type": "gt"
+          },
+          "operator": {
+            "type": "and"
+          },
+          "query": {
+            "params": [
+              "A",
+              "5m",
+              "now"
+            ]
+          },
+          "reducer": {
+            "params": [],
+            "type": "avg"
+          },
+          "type": "query"
+        }],
         "executionErrorState": "alerting",
         "for": "0m",
         "frequency": "60s",
@@ -1026,22 +967,18 @@
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
-      "targets": [
-        {
-          "expr": "zookeeper_maxrequestlatency",
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [
-        {
-          "colorMode": "critical",
-          "fill": true,
-          "line": true,
-          "op": "gt",
-          "value": 20
-        }
-      ],
+      "targets": [{
+        "expr": "zookeeper_maxrequestlatency",
+        "legendFormat": "{{instance}}",
+        "refId": "A"
+      }],
+      "thresholds": [{
+        "colorMode": "critical",
+        "fill": true,
+        "line": true,
+        "op": "gt",
+        "value": 20
+      }],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
@@ -1059,8 +996,7 @@
         "show": true,
         "values": []
       },
-      "yaxes": [
-        {
+      "yaxes": [{
           "format": "short",
           "label": null,
           "logBase": 1,

@@ -55,7 +55,10 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets:
-          - 'consumer:1234'
+          - "consumer:1234"
+          - "consumer-1:1234"
+          - "consumer-2:1234"
+          - "consumer-3:1234"
         labels:
           env: 'dev'
 
