@@ -39,16 +39,15 @@ public class SimpleProducer {
         topicName = System.getenv().getOrDefault("TOPIC","sample");
         messageBackOff = Long.valueOf(System.getenv().getOrDefault("MESSAGE_BACKOFF","100"));
 
-        final Integer nbPartitions =  Integer.valueOf(System.getenv().getOrDefault("NB_PARTITIONS","2"));
+        final Integer numberOfPartitions =  Integer.valueOf(System.getenv().getOrDefault("NUMBER_OF_PARTITIONS","2"));
         final Short replicationFactor =  Short.valueOf(System.getenv().getOrDefault("REPLICATION_FACTOR","1"));
 
         AdminClient adminClient = KafkaAdminClient.create(properties);
-        createTopic(adminClient, topicName, nbPartitions, replicationFactor);
+        createTopic(adminClient, topicName, numberOfPartitions, replicationFactor);
     }
 
     private void start() throws InterruptedException {
         logger.info("creating producer with props: {}", properties);
-        properties.forEach( (k, v) -> System.out.println(k + ": " + v));
 
 
         logger.info("Sending data to `{}` topic", topicName);
@@ -97,10 +96,10 @@ public class SimpleProducer {
         return props;
     }
 
-    private void createTopic(AdminClient adminClient, String topicName, Integer nbPartitions, Short replicationFactor) throws InterruptedException, ExecutionException {
+    private void createTopic(AdminClient adminClient, String topicName, Integer numberOfPartitions, Short replicationFactor) throws InterruptedException, ExecutionException {
         if (!adminClient.listTopics().names().get().contains(topicName)) {
             logger.info("Creating topic {}", topicName);
-            final NewTopic newTopic = new NewTopic(topicName, nbPartitions, replicationFactor);
+            final NewTopic newTopic = new NewTopic(topicName, numberOfPartitions, replicationFactor);
             try {
                 CreateTopicsResult topicsCreationResult = adminClient.createTopics(Collections.singleton(newTopic));
                 topicsCreationResult.all().get();
