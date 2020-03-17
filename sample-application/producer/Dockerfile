@@ -12,4 +12,4 @@ RUN apk add bash
 WORKDIR /app
 COPY --from=mavenBuild ./app/target/*.jar ./
 ENV JAVA_OPTS ""
-CMD [ "bash", "-c", "java ${JAVA_OPTS} -jar *.jar workshop_topic_2"]
+CMD [ "bash", "-c", "java ${JAVA_OPTS} -jar *.jar"]

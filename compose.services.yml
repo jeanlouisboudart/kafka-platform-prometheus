@@ -110,10 +110,11 @@ services:
     environment:
       JAVA_OPTS: "-javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-producer.yml -Xmx256M -Xms256M"
       KAFKA_BOOTSTRAP_SERVERS: "kafka-1:9092, kafka-2:9092, kafka-3:9092"
-      KAFKA_ACKS: "all" # default: "1"
+      TOPIC: "sample"
       REPLICATION_FACTOR: 3
       NB_PARTITIONS: 2
       MESSAGE_BACKOFF: 1000 # Frequency of message injection
+      KAFKA_ACKS: "all" # default: "1"
       KAFKA_ENABLE_IDEMPOTENCE: "true"
       KAFKA_MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION: "5" # default: 5
       KAFKA_RETRIES: "10" # default: Integer.MAX_VALUE
