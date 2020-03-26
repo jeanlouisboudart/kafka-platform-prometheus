@@ -93,7 +93,7 @@ public class SimpleConsumer {
     };
 
     private Map<String, String> defaultProps = Map.of(
-            ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19092",
+            ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19092,localhost:19093,localhost:19094",
             ConsumerConfig.GROUP_ID_CONFIG, "simple-consumer",
             ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.LongDeserializer",
             ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");

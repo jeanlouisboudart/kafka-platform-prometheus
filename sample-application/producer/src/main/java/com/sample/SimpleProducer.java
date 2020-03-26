@@ -40,7 +40,7 @@ public class SimpleProducer {
         messageBackOff = Long.valueOf(System.getenv().getOrDefault("MESSAGE_BACKOFF","100"));
 
         final Integer numberOfPartitions =  Integer.valueOf(System.getenv().getOrDefault("NUMBER_OF_PARTITIONS","2"));
-        final Short replicationFactor =  Short.valueOf(System.getenv().getOrDefault("REPLICATION_FACTOR","1"));
+        final Short replicationFactor =  Short.valueOf(System.getenv().getOrDefault("REPLICATION_FACTOR","3"));
 
         AdminClient adminClient = KafkaAdminClient.create(properties);
         createTopic(adminClient, topicName, numberOfPartitions, replicationFactor);
@@ -74,7 +74,7 @@ public class SimpleProducer {
     }
 
     private Map<String, String> defaultProps = Map.of(
-            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19092",
+            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19092,localhost:19093,localhost:19094",
             ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.LongSerializer",
             ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
 
