@@ -4,29 +4,21 @@ import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
 import org.apache.kafka.clients.admin.KafkaAdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.kafka.common.errors.TopicExistsException;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Produced;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class SimpleKafkaStreams {
@@ -42,7 +34,7 @@ public class SimpleKafkaStreams {
         simpleKafkaStreams.start();
     }
 
-    public SimpleKafkaStreams() throws ExecutionException, InterruptedException {
+    public SimpleKafkaStreams() throws InterruptedException, ExecutionException {
         properties = buildProperties(defaultProps, System.getenv(), KAFKA_ENV_PREFIX);
         inputTopic = System.getenv().getOrDefault("INPUT_TOPIC","sample");
         outputTopic = System.getenv().getOrDefault("OUTPUT_TOPIC","output");
@@ -56,13 +48,12 @@ public class SimpleKafkaStreams {
 
     }
 
-    private void start() throws InterruptedException {
+    private void start() {
         logger.info("creating streams with props: {}", properties);
 
         final StreamsBuilder builder = new StreamsBuilder();
         KTable<String, Long> count = builder.stream(inputTopic, Consumed.with(Serdes.Long(), Serdes.String()))
-                .selectKey((key, value) -> key % 2 == 0 ? "even" : "odd")
-                .groupByKey()
+                .groupBy((key, value) -> key % 2 == 0 ? "even" : "odd", Grouped.with(Serdes.String(), Serdes.String()))
                 .count();
         count
                 .toStream()
@@ -104,7 +95,7 @@ public class SimpleKafkaStreams {
             try {
                 CreateTopicsResult topicsCreationResult = adminClient.createTopics(Collections.singleton(newTopic));
                 topicsCreationResult.all().get();
-            } catch (TopicExistsException e) {
+            } catch (ExecutionException e) {
                 //silent ignore if topic already exists
             }
         }
