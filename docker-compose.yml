@@ -172,6 +172,22 @@ services:
       - kafka-2
       - kafka-3
 
+  streams:
+    build: ./sample-application/streams
+    hostname: streams-1
+    environment:
+      JAVA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-consumer.yml -Xmx256M -Xms256M
+      KAFKA_BOOTSTRAP_SERVERS: "kafka-1:9092, kafka-2:9092, kafka-3:9092"
+      INPUT_TOPIC: "sample"
+      OUTPUT_TOPIC: "count-even-odd-entries"
+    volumes:
+      - jmx-exporter-vol:/usr/share/jmx_exporter/
+    depends_on:
+      - jmx-exporter
+      - kafka-1
+      - kafka-2
+      - kafka-3
+
   prometheus:
     image: prom/prometheus:v2.11.1
     ports:
