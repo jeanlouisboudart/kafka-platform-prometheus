@@ -77,6 +77,7 @@ services:
       KAFKA_BROKER_ID: "1"
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-2.0.0.yml
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
+      KAFKA_MIN_INSYNC_REPLICAS: 2
     volumes:
     - jmx-exporter-vol:/usr/share/jmx_exporter/
 
@@ -100,6 +101,7 @@ services:
       KAFKA_BROKER_ID: "2"
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-2.0.0.yml
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
+      KAFKA_MIN_INSYNC_REPLICAS: 2
     volumes:
     - jmx-exporter-vol:/usr/share/jmx_exporter/
 
@@ -123,6 +125,7 @@ services:
       KAFKA_BROKER_ID: "3"
       KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-2.0.0.yml
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
+      KAFKA_MIN_INSYNC_REPLICAS: 2
     volumes:
     - jmx-exporter-vol:/usr/share/jmx_exporter/
 
