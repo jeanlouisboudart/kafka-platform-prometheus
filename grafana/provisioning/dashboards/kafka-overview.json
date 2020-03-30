@@ -860,7 +860,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(process_cpu_secondspersec{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"}[1m])",
+          "expr": "rate(process_cpu_seconds_total{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"}[1m])",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{instance}}",
