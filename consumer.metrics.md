@@ -24,7 +24,7 @@ Lag between the high watermark of a log and the consumer offset
 
 A growing lag may mean underconsumption, perhaps because of a slow consumer.
 
-Alerts may be useful. Exact values need to crrespond to topic SLAs.
+Alerts may be useful. Exact values need to correspond to topic SLAs.
 
 ## average fetch size
 
@@ -38,7 +38,7 @@ relevant settings:
 `max.partition.fetch.bytes` - 1MB by default
 `fetch.max.wait.ms` 500ms by default.
 
-A latency around the max wait setting points to the max bytes never 'winning'.
+A latency value close to the max.wait setting points to the max fetch bytes never 'winning'.
 
 ## average throttle time
 
@@ -58,20 +58,16 @@ A lag metric between the consumer offset and the start offset of the log. If thi
 
 Data is being removed from the log faster then the consumer can consume it.
 
+https://cwiki.apache.org/confluence/display/KAFKA/KIP-223+-+Add+per-topic+min+lead+and+per-partition+lead+metrics+to+KafkaConsumer
+
 https://issues.apache.org/jira/browse/KAFKA-6184
 
 ## Q
-
-// Q - why does a consumer require multiple connections if it is consuming from a single topic
 
 // Q - what is this metric for: kafka_server_fetcherlagmetrics_consumerlag.
 
 topic is `_consumer_offsets`
 clientid=`ReplicaFetcherThread-X-Y`
-
-// Q - How valuable are node_metrics for consumer metrics?
-
-Intuition: if the brokers are skewed, these metrics will show it
 
 // Q - failed authentication rate vs failed reauthentication rate
 

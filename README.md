@@ -65,7 +65,9 @@ Open a new terminal window and generate random messages to simulate consumer loa
 ```bash
 docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-consumer-perf-test --messages 100000000 --threads 1 --topic demo-perf-topic --broker-list localhost:9092 --timeout 60000'
 ```
+## Setup
 
+![Kafka 1](./images/monitoring.setup.svg)
 
 ## Dashboards
 
