@@ -83,12 +83,12 @@ public class SimpleConsumer {
 
         @Override
         public void onPartitionsRevoked(Collection<TopicPartition> revokedPartitions) {
-            logger.info("Partition revoked : {}", revokedPartitions);
+            logger.info("Partitions revoked : {}", revokedPartitions);
         }
 
         @Override
         public void onPartitionsAssigned(Collection<TopicPartition> assignedPartitions) {
-            logger.info("Partition assigned : {}", assignedPartitions);
+            logger.info("Partitions assigned : {}", assignedPartitions);
         }
     };
 

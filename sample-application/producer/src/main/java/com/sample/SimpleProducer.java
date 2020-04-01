@@ -9,6 +9,7 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+import org.apache.kafka.common.config.TopicConfig;
 import org.apache.kafka.common.errors.TopicExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,7 +100,11 @@ public class SimpleProducer {
     private void createTopic(AdminClient adminClient, String topicName, Integer numberOfPartitions, Short replicationFactor) throws InterruptedException, ExecutionException {
         if (!adminClient.listTopics().names().get().contains(topicName)) {
             logger.info("Creating topic {}", topicName);
+
+            final Map<String, String> configs = replicationFactor < 3 ? Map.of(TopicConfig.MIN_IN_SYNC_REPLICAS_CONFIG, "1") : Map.of();
+
             final NewTopic newTopic = new NewTopic(topicName, numberOfPartitions, replicationFactor);
+            newTopic.configs(configs);
             try {
                 CreateTopicsResult topicsCreationResult = adminClient.createTopics(Collections.singleton(newTopic));
                 topicsCreationResult.all().get();
