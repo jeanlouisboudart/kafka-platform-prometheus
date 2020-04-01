@@ -6,7 +6,7 @@ services:
     environment:
       JAVA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-consumer.yml -Xmx256M -Xms256M
       KAFKA_BOOTSTRAP_SERVERS: "kafka-1:9092, kafka-2:9092, kafka-3:9092"
-      TOPIC: "sample"
+      TOPIC: "workshop_topic_2"
       CHECK_GAPS: "false"
       COMMIT_STRATEGY: "AUTO_COMMIT" # possible values AUTO_COMMIT or PER_BATCH or PER_MESSAGES
       KAFKA_ENABLE_AUTO_COMMIT_CONFIG: "false" # default true if group.id is provided
@@ -90,6 +90,10 @@ services:
     extends:
       file: compose.services.yml
       service: producer
+    environment:
+      TOPIC: "workshop_topic_2"
+      REPLICATION_FACTOR: 3
+      NUMBER_OF_PARTITIONS: 6
     depends_on:
       - jmx-exporter
       - kafka-1
