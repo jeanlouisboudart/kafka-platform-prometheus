@@ -1735,7 +1735,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "kafka_network_socketserver_networkprocessoravgidlepercent{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"}*100",
+              "expr": "kafka_network_socketserver_networkprocessoravgidlepercent{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"}",
               "legendFormat": "{{instance}}",
               "refId": "A"
             }
@@ -1760,7 +1760,7 @@
           },
           "yaxes": [
             {
-              "format": "percent",
+              "format": "percentunit",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -1821,7 +1821,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "kafka_server_kafkarequesthandlerpool_requesthandleravgidlepercent{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"}*100",
+              "expr": "kafka_server_kafkarequesthandlerpool_requesthandleravgidlepercent_total{job=\"kafka\",env=\"$env\",instance=~\"$broker_id\"}",
               "legendFormat": "{{instance}}",
               "refId": "A"
             }
@@ -1846,7 +1846,7 @@
           },
           "yaxes": [
             {
-              "format": "percent",
+              "format": "percentunit",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -4575,7 +4575,7 @@
       "type": "row"
     }
   ],
-  "refresh": false,
+  "refresh": "10s",
   "schemaVersion": 19,
   "style": "dark",
   "tags": [],
@@ -4594,13 +4594,7 @@
         "label": "Environment",
         "multi": false,
         "name": "env",
-        "options": [
-          {
-            "selected": true,
-            "text": "dev",
-            "value": "dev"
-          }
-        ],
+        "options": [],
         "query": "label_values(env)",
         "refresh": 1,
         "regex": "",
@@ -4681,7 +4675,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {

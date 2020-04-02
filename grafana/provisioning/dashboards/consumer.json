@@ -1130,7 +1130,7 @@
       }
     }
   ],
-  "refresh": "",
+  "refresh": "10s",
   "schemaVersion": 19,
   "style": "dark",
   "tags": [],
@@ -1139,10 +1139,9 @@
       "allValue": null,
       "current": {
         "tags": [],
-        "text": "consumer-1 + producer-1",
+        "text": "All",
         "value": [
-          "consumer-1",
-          "producer-1"
+          "$__all"
         ]
       },
       "datasource": "Prometheus",
@@ -1153,13 +1152,13 @@
       "multi": true,
       "name": "client_id",
       "options": [{
-          "selected": false,
+          "selected": true,
           "text": "All",
           "value": "$__all"
         }
       ],
       "query": "label_values(client_id)",
-      "refresh": 0,
+      "refresh": 1,
       "regex": "",
       "skipUrlSync": false,
       "sort": 0,
@@ -1171,7 +1170,7 @@
     }]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {

@@ -1022,11 +1022,12 @@
   "schemaVersion": 19,
   "style": "dark",
   "tags": [],
+  "refresh": "10s",
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {

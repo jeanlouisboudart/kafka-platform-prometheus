@@ -16,7 +16,7 @@ rules:
     broker: "$4:$5"
 
 - pattern : kafka.server<type=KafkaRequestHandlerPool, name=RequestHandlerAvgIdlePercent><>OneMinuteRate
-  name: kafka_server_kafkarequesthandlerpool_requesthandleravgidlepercent
+  name: kafka_server_kafkarequesthandlerpool_requesthandleravgidlepercent_total
   type: GAUGE
 
 # Count and Value
