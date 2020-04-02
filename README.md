@@ -67,9 +67,7 @@ docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-consumer-perf-test --me
 ```
 ## Setup
 
-<div style="display: flex; justify-content: center;">
- <img src="https://github.com/ksilin/kafka-platform-prometheus/blob/master/images/monitoring.setup.svg" height="500">
-</div>
+![Architecture](./images/monitoring.setup.svg)
 
 ## Dashboards
 
