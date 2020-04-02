@@ -1,10 +1,5 @@
 version: "2.4"
 services:
-  jmx-exporter:
-    build: ./jmx-exporter
-    tty: true
-    volumes:
-      - jmx-exporter-vol:/usr/share/jmx_exporter/
 
   zookeeper-1:
     image: confluentinc/cp-zookeeper
@@ -19,7 +14,7 @@ services:
       EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
     volumes:
-      - jmx-exporter-vol:/usr/share/jmx_exporter/
+      - ./jmx-exporter:/usr/share/jmx_exporter/
 
   zookeeper-2:
     image: confluentinc/cp-zookeeper
@@ -34,7 +29,7 @@ services:
       EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
     volumes:
-      - jmx-exporter-vol:/usr/share/jmx_exporter/
+      - ./jmx-exporter:/usr/share/jmx_exporter/
 
   zookeeper-3:
     image: confluentinc/cp-zookeeper
@@ -49,7 +44,7 @@ services:
       EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
     volumes:
-      - jmx-exporter-vol:/usr/share/jmx_exporter/
+      - ./jmx-exporter:/usr/share/jmx_exporter/
 
   kafka-1:
     image: confluentinc/cp-kafka:5.4.0
@@ -68,7 +63,7 @@ services:
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
       KAFKA_MIN_INSYNC_REPLICAS: 2
     volumes:
-      - jmx-exporter-vol:/usr/share/jmx_exporter/
+      - ./jmx-exporter:/usr/share/jmx_exporter/
 
   kafka-2:
     image: confluentinc/cp-kafka:5.4.0
@@ -87,7 +82,7 @@ services:
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
       KAFKA_MIN_INSYNC_REPLICAS: 2
     volumes:
-      - jmx-exporter-vol:/usr/share/jmx_exporter/
+      - ./jmx-exporter:/usr/share/jmx_exporter/
 
   kafka-3:
     image: confluentinc/cp-kafka:5.4.0
@@ -106,7 +101,7 @@ services:
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
       KAFKA_MIN_INSYNC_REPLICAS: 2
     volumes:
-      - jmx-exporter-vol:/usr/share/jmx_exporter/
+      - ./jmx-exporter:/usr/share/jmx_exporter/
 
   producer:
     build: ./sample-application/producer
@@ -125,7 +120,7 @@ services:
       KAFKA_DELIVERY_TIMEOUT_MS: "1000" # default: 120000
       #KAFKA_TRANSACTIONAL_ID: "prod-1"
     volumes:
-      - jmx-exporter-vol:/usr/share/jmx_exporter/
+      - ./jmx-exporter:/usr/share/jmx_exporter/
 
   prometheus:
     image: prom/prometheus:v2.11.1
@@ -158,8 +153,7 @@ services:
     ports:
       - 9999:9999
     volumes:
-      - ./kafka-lag-exporter/application.conf:/opt/docker/conf/application.conf
-      - ./kafka-lag-exporter/logback.xml:/opt/docker/conf/logback.xml
+      - ./kafka-lag-exporter/:/opt/docker/conf/
 
   grafana:
     image: grafana/grafana:6.6.2
@@ -169,6 +163,3 @@ services:
       - 3000:3000
     volumes:
       - ./grafana/provisioning/:/etc/grafana/provisioning/
-
-volumes:
-  jmx-exporter-vol: {}
