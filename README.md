@@ -55,7 +55,7 @@ docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-topics --create --parti
 Open a new terminal window and generate random messages to simulate producer load.
 
 ```bash
-docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-producer-perf-test --throughput 500 --num-records 100000000 --topic demo-perf-topic --record-size 100 --producer-props bootstrap.servers=localhost:9092'
+docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-producer-perf-test --throughput 500 --num-records 100000000 --topic demo-perf-topic --record-size 100 --producer-props bootstrap.servers=kafka-1:9092'
 ```
 
 ## Consumes random messages
@@ -63,8 +63,30 @@ docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-producer-perf-test --th
 Open a new terminal window and generate random messages to simulate consumer load.
 
 ```bash
-docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-consumer-perf-test --messages 100000000 --threads 1 --topic demo-perf-topic --broker-list localhost:9092 --timeout 60000'
+docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-consumer-perf-test --messages 100000000 --threads 1 --topic demo-perf-topic --broker-list kafka-1:9092 --timeout 60000'
 ```
+
+## Create a connector
+
+```bash
+docker-compose exec connect \
+     curl -X PUT \
+     -H "Content-Type: application/json" \
+     --data '{
+            "connector.class":"org.apache.kafka.connect.file.FileStreamSinkConnector",
+            "tasks.max":"4",
+            "file": "/tmp/test.sink.txt",
+            "topics": "demo-perf-topic"
+}' \
+     http://localhost:8083/connectors/file-sink/config | jq .
+```
+
+Verify that data is written to file `/tmp/test.sink.txt`:
+
+```bash
+docker-compose exec connect bash -c 'tail -10 /tmp/test.sink.txt'
+```
+
 ## Setup
 
 ![Architecture](./images/monitoring.setup.svg)
@@ -105,3 +127,7 @@ This is using [kafka-lag-exporter](https://github.com/lightbend/kafka-lag-export
 ![Consumer Lag 1](./images/consumerlag1.jpg)
 
 ![Consumer Lag 2](./images/consumerlag2.jpg)
+
+### Connect Dashboard
+
+![Connect](./images/connect1.jpg)
