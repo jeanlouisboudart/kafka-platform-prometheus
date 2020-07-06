@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 8,
-  "iteration": 1594047800659,
+  "iteration": 1594050947124,
   "links": [],
   "panels": [
     {
@@ -483,6 +483,58 @@
       "type": "row"
     },
     {
+      "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fontSize": "80%",
+      "format": "short",
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 13
+      },
+      "id": 120,
+      "interval": null,
+      "legend": {
+        "percentage": true,
+        "show": true,
+        "values": true
+      },
+      "legendType": "Under graph",
+      "links": [],
+      "maxDataPoints": 1,
+      "nullPointMode": "connected",
+      "pieType": "pie",
+      "repeat": null,
+      "strokeWidth": 1,
+      "targets": [
+        {
+          "expr": "sum by (version) (kafka_connect_app_info{env=\"$env\",instance=~\"$instance\",version!=\"\"})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{version}}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Kafka Connect Version ($instance)",
+      "type": "grafana-piechart-panel",
+      "valueName": "current"
+    },
+    {
       "cacheTimeout": null,
       "colorBackground": false,
       "colorValue": true,
@@ -509,9 +561,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
+        "w": 24,
         "x": 0,
-        "y": 13
+        "y": 18
       },
       "id": 130,
       "interval": null,
@@ -541,7 +593,14 @@
           "to": "null"
         }
       ],
-      "repeat": null,
+      "repeat": "instance",
+      "scopedVars": {
+        "instance": {
+          "selected": true,
+          "text": "connect-europe:1234",
+          "value": "connect-europe:1234"
+        }
+      },
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -561,7 +620,7 @@
         }
       ],
       "thresholds": "1,1",
-      "title": "Startup time",
+      "title": "Startup time ($instance)",
       "type": "singlestat",
       "valueFontSize": "110%",
       "valueMaps": [
@@ -575,12 +634,9 @@
     },
     {
       "aliasColors": {},
-      "breakPoint": "50%",
-      "cacheTimeout": null,
-      "combine": {
-        "label": "Others",
-        "threshold": 0
-      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
@@ -588,222 +644,90 @@
         },
         "overrides": []
       },
-      "fontSize": "80%",
-      "format": "short",
+      "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 3,
-        "y": 13
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 22
       },
-      "id": 120,
-      "interval": null,
+      "hiddenSeries": false,
+      "id": 93,
       "legend": {
-        "percentage": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
         "show": true,
-        "values": true
+        "total": false,
+        "values": false
       },
-      "legendType": "Under graph",
+      "lines": true,
+      "linewidth": 1,
       "links": [],
-      "maxDataPoints": 1,
-      "nullPointMode": "connected",
-      "pieType": "pie",
-      "strokeWidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_app_info{env=\"$env\",instance=~\"$instance\",version!=\"\"}",
-          "instant": true,
+          "expr": "kafka_connect_connect_metrics_io_ratio{env=\"$env\",instance=~\"$instance\",client_id!=\"\"}",
+          "format": "time_series",
           "interval": "",
-          "legendFormat": "{{version}}",
+          "intervalFactor": 1,
+          "legendFormat": "{{client_id}}",
           "refId": "A"
         }
       ],
+      "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
-      "title": "Kafka Connect Version",
-      "type": "grafana-piechart-panel",
-      "valueName": "current"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
-      "datasource": "Prometheus",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
+      "title": "Connect Metrics: IO Rate",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
       },
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
       },
-      "gridPos": {
-        "h": 4,
-        "w": 2,
-        "x": 7,
-        "y": 13
-      },
-      "id": 99,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
+      "yaxes": [
         {
-          "name": "value to text",
-          "value": 1
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
         },
         {
-          "name": "range to text",
-          "value": 2
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
         }
       ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "kafka_connect_connect_worker_metrics_connector_count{env=\"dev\", instance=\"connect-europe:1234\", job=\"connect\"}",
-      "targets": [
-        {
-          "expr": "kafka_connect_connect_worker_metrics_connector_count{env=\"$env\",instance=~\"$instance\"}",
-          "format": "time_series",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": "1000000000",
-      "title": "Number of Connectors",
-      "type": "singlestat",
-      "valueFontSize": "200%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorPostfix": false,
-      "colorPrefix": false,
-      "colorValue": true,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
-      "datasource": "Prometheus",
-      "description": "The total number of connector starts that succeeded.",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 2,
-        "x": 9,
-        "y": 13
-      },
-      "id": 103,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": true
-      },
-      "tableColumn": "kafka_connect_connect_worker_metrics_connector_startup_success_total{env=\"dev\", instance=\"connect-europe:1234\", job=\"connect\"}",
-      "targets": [
-        {
-          "expr": "kafka_connect_connect_worker_metrics_connector_startup_success_total{env=\"$env\",instance=~\"$instance\"}",
-          "format": "time_series",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": "100000000",
-      "title": "Connector Startup Success Total",
-      "type": "singlestat",
-      "valueFontSize": "200%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "cacheTimeout": null,
@@ -832,9 +756,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 2,
-        "x": 12,
-        "y": 13
+        "w": 24,
+        "x": 0,
+        "y": 29
       },
       "id": 104,
       "interval": null,
@@ -864,6 +788,14 @@
           "to": "null"
         }
       ],
+      "repeat": "instance",
+      "scopedVars": {
+        "instance": {
+          "selected": true,
+          "text": "connect-europe:1234",
+          "value": "connect-europe:1234"
+        }
+      },
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -883,7 +815,7 @@
         }
       ],
       "thresholds": "1,1",
-      "title": "Connector Startup Failure Total",
+      "title": "Connector Startup Failure Total ($instance)",
       "type": "singlestat",
       "valueFontSize": "200%",
       "valueMaps": [
@@ -921,9 +853,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 2,
-        "x": 14,
-        "y": 13
+        "w": 24,
+        "x": 0,
+        "y": 33
       },
       "id": 108,
       "interval": null,
@@ -953,6 +885,14 @@
           "to": "null"
         }
       ],
+      "repeat": "instance",
+      "scopedVars": {
+        "instance": {
+          "selected": true,
+          "text": "connect-europe:1234",
+          "value": "connect-europe:1234"
+        }
+      },
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -972,7 +912,7 @@
         }
       ],
       "thresholds": "1000000000",
-      "title": "Number of Rebalances",
+      "title": "Number of Rebalances ($instance)",
       "type": "singlestat",
       "valueFontSize": "200%",
       "valueMaps": [
@@ -1010,9 +950,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
-        "x": 16,
-        "y": 13
+        "w": 24,
+        "x": 0,
+        "y": 37
       },
       "id": 109,
       "interval": null,
@@ -1042,6 +982,14 @@
           "to": "null"
         }
       ],
+      "repeat": "instance",
+      "scopedVars": {
+        "instance": {
+          "selected": true,
+          "text": "connect-europe:1234",
+          "value": "connect-europe:1234"
+        }
+      },
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -1061,7 +1009,7 @@
         }
       ],
       "thresholds": "1000000000",
-      "title": "Average time of Rebalances",
+      "title": "Average time of Rebalances ($instance)",
       "type": "singlestat",
       "valueFontSize": "110%",
       "valueMaps": [
@@ -1104,9 +1052,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
-        "x": 20,
-        "y": 13
+        "w": 24,
+        "x": 0,
+        "y": 41
       },
       "id": 110,
       "interval": null,
@@ -1136,6 +1084,14 @@
           "to": "null"
         }
       ],
+      "repeat": "instance",
+      "scopedVars": {
+        "instance": {
+          "selected": true,
+          "text": "connect-europe:1234",
+          "value": "connect-europe:1234"
+        }
+      },
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -1155,9 +1111,206 @@
         }
       ],
       "thresholds": "1000000000",
-      "title": "Time since last rebalance",
+      "title": "Time since last rebalance ($instance)",
       "type": "singlestat",
       "valueFontSize": "120%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": true,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 45
+      },
+      "id": 99,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "repeat": "instance",
+      "scopedVars": {
+        "instance": {
+          "selected": true,
+          "text": "connect-europe:1234",
+          "value": "connect-europe:1234"
+        }
+      },
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "kafka_connect_connect_worker_metrics_connector_count{env=\"dev\", instance=\"connect-europe:1234\", job=\"connect\"}",
+      "targets": [
+        {
+          "expr": "kafka_connect_connect_worker_metrics_connector_count{env=\"$env\",instance=~\"$instance\"}",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "1000000000",
+      "title": "Number of Connectors ($instance)",
+      "type": "singlestat",
+      "valueFontSize": "200%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorPostfix": false,
+      "colorPrefix": false,
+      "colorValue": true,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "Prometheus",
+      "description": "The total number of connector starts that succeeded.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 49
+      },
+      "id": 103,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "repeat": "instance",
+      "scopedVars": {
+        "instance": {
+          "selected": true,
+          "text": "connect-europe:1234",
+          "value": "connect-europe:1234"
+        }
+      },
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "kafka_connect_connect_worker_metrics_connector_startup_success_total{env=\"dev\", instance=\"connect-europe:1234\", job=\"connect\"}",
+      "targets": [
+        {
+          "expr": "kafka_connect_connect_worker_metrics_connector_startup_success_total{env=\"$env\",instance=~\"$instance\"}",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "100000000",
+      "title": "Connector Startup Success Total ($instance)",
+      "type": "singlestat",
+      "valueFontSize": "200%",
       "valueMaps": [
         {
           "op": "=",
@@ -1185,7 +1338,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 17
+        "y": 53
       },
       "hiddenSeries": false,
       "id": 95,
@@ -1283,7 +1436,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 17
+        "y": 53
       },
       "hiddenSeries": false,
       "id": 91,
@@ -1363,110 +1516,13 @@
       }
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 16,
-        "y": 17
-      },
-      "hiddenSeries": false,
-      "id": 93,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "kafka_connect_connect_metrics_io_ratio{env=\"$env\",instance=~\"$instance\",client_id!=\"\"}",
-          "format": "time_series",
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{client_id}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Connect Metrics: IO Rate",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 24
+        "y": 60
       },
       "id": 112,
       "panels": [],
@@ -1499,9 +1555,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
+        "w": 24,
         "x": 0,
-        "y": 25
+        "y": 61
       },
       "id": 101,
       "interval": null,
@@ -1531,6 +1587,14 @@
           "to": "null"
         }
       ],
+      "repeat": "instance",
+      "scopedVars": {
+        "instance": {
+          "selected": true,
+          "text": "connect-europe:1234",
+          "value": "connect-europe:1234"
+        }
+      },
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -1550,7 +1614,7 @@
         }
       ],
       "thresholds": "10000000000",
-      "title": "Number of Tasks",
+      "title": "Number of Tasks ($instance)",
       "type": "singlestat",
       "valueFontSize": "200%",
       "valueMaps": [
@@ -1589,9 +1653,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
-        "x": 4,
-        "y": 25
+        "w": 24,
+        "x": 0,
+        "y": 65
       },
       "id": 105,
       "interval": null,
@@ -1621,6 +1685,14 @@
           "to": "null"
         }
       ],
+      "repeat": "instance",
+      "scopedVars": {
+        "instance": {
+          "selected": true,
+          "text": "connect-europe:1234",
+          "value": "connect-europe:1234"
+        }
+      },
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -1640,7 +1712,7 @@
         }
       ],
       "thresholds": "10000000000",
-      "title": "Task Startup Success Total",
+      "title": "Task Startup Success Total ($instance)",
       "type": "singlestat",
       "valueFontSize": "200%",
       "valueMaps": [
@@ -1679,9 +1751,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
-        "x": 8,
-        "y": 25
+        "w": 24,
+        "x": 0,
+        "y": 69
       },
       "id": 106,
       "interval": null,
@@ -1711,6 +1783,14 @@
           "to": "null"
         }
       ],
+      "repeat": "instance",
+      "scopedVars": {
+        "instance": {
+          "selected": true,
+          "text": "connect-europe:1234",
+          "value": "connect-europe:1234"
+        }
+      },
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -1730,7 +1810,7 @@
         }
       ],
       "thresholds": "1,1",
-      "title": "Task Startup Failure Total",
+      "title": "Task Startup Failure Total ($instance)",
       "type": "singlestat",
       "valueFontSize": "200%",
       "valueMaps": [
@@ -1760,7 +1840,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 29
+        "y": 73
       },
       "hiddenSeries": false,
       "id": 113,
@@ -1857,7 +1937,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 29
+        "y": 73
       },
       "hiddenSeries": false,
       "id": 114,
@@ -1954,7 +2034,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 36
+        "y": 80
       },
       "hiddenSeries": false,
       "id": 115,
@@ -2052,7 +2132,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 36
+        "y": 80
       },
       "hiddenSeries": false,
       "id": 116,
@@ -2150,7 +2230,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 43
+        "y": 87
       },
       "hiddenSeries": false,
       "id": 118,
@@ -2248,7 +2328,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 43
+        "y": 87
       },
       "hiddenSeries": false,
       "id": 117,
@@ -2335,7 +2415,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 50
+        "y": 94
       },
       "id": 139,
       "panels": [],
@@ -2361,7 +2441,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 51
+        "y": 95
       },
       "hiddenSeries": false,
       "id": 140,
@@ -2460,7 +2540,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 51
+        "y": 95
       },
       "hiddenSeries": false,
       "id": 141,
@@ -2560,7 +2640,7 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 51
+        "y": 95
       },
       "hiddenSeries": false,
       "id": 144,
@@ -2659,7 +2739,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 58
+        "y": 102
       },
       "hiddenSeries": false,
       "id": 142,
@@ -2758,7 +2838,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 58
+        "y": 102
       },
       "hiddenSeries": false,
       "id": 145,
@@ -2857,7 +2937,7 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 58
+        "y": 102
       },
       "hiddenSeries": false,
       "id": 143,
@@ -2944,7 +3024,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 65
+        "y": 109
       },
       "id": 134,
       "panels": [],
@@ -2970,7 +3050,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 66
+        "y": 110
       },
       "hiddenSeries": false,
       "id": 135,
@@ -3069,7 +3149,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 66
+        "y": 110
       },
       "hiddenSeries": false,
       "id": 136,
@@ -3169,7 +3249,7 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 66
+        "y": 110
       },
       "hiddenSeries": false,
       "id": 137,
@@ -3293,7 +3373,7 @@
         "datasource": "Prometheus",
         "definition": "label_values(kafka_connect_app_info,instance)",
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "",
         "multi": false,
         "name": "instance",
@@ -3312,7 +3392,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": [
             "$__all"
@@ -3370,5 +3450,5 @@
   "timezone": "",
   "title": "Kafka Connect",
   "uid": "AEaSQ97mz",
-  "version": 6
+  "version": 12
 }
