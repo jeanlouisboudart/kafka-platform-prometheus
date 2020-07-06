@@ -66,7 +66,7 @@ Open a new terminal window and generate random messages to simulate consumer loa
 docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-consumer-perf-test --messages 100000000 --threads 1 --topic demo-perf-topic --broker-list kafka-1:9092 --timeout 60000'
 ```
 
-## Create a connector
+## Create a sink connector
 
 ```bash
 docker-compose exec connect \
@@ -86,6 +86,36 @@ Verify that data is written to file `/tmp/test.sink.txt`:
 ```bash
 docker-compose exec connect bash -c 'tail -10 /tmp/test.sink.txt'
 ```
+
+## Create a topic
+
+Create `demo-perf-topic-copy` with 4 partitions and 3 replicas.
+
+```bash
+docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-topics --create --partitions 4 --replication-factor 3 --topic demo-perf-topic-copy --zookeeper zookeeper-1:2181'
+```
+
+## Create a source connector
+
+```bash
+docker-compose exec connect \
+     curl -X PUT \
+     -H "Content-Type: application/json" \
+     --data '{
+            "connector.class":"org.apache.kafka.connect.file.FileStreamSourceConnector",
+            "tasks.max":"1",
+            "file": "/tmp/test.sink.txt",
+            "topic": "demo-perf-topic-copy"
+}' \
+     http://localhost:8083/connectors/file-source/config | jq .
+```
+
+Verify that data is written in kafka topic `demo-perf-topic-copy`:
+
+```bash
+docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-console-consumer -bootstrap-server kafka-1:9092 --topic demo-perf-topic-copy --from-beginning --max-messages 10'
+```
+
 
 ## Setup
 
