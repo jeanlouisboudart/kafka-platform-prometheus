@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 5,
-  "iteration": 1594216022812,
+  "iteration": 1594281530015,
   "links": [],
   "panels": [
     {
@@ -54,14 +54,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              },
-              {
-                "color": "#EAB839",
-                "value": 90
               }
             ]
           }
@@ -149,7 +141,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Current Task status",
+      "title": "Current Tasks",
       "type": "bargauge"
     },
     {
@@ -643,22 +635,35 @@
         {
           "alias": "",
           "align": "auto",
-          "colorMode": "row",
+          "colorMode": "cell",
           "colors": [
             "rgba(50, 172, 45, 0.97)",
             "rgba(237, 129, 40, 0.89)",
             "#F2495C"
           ],
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
+          "decimals": 0,
           "mappingType": 1,
           "pattern": "status",
           "thresholds": [
-            ""
+            "2"
           ],
           "type": "string",
           "unit": "short",
-          "valueMaps": []
+          "valueMaps": [
+            {
+              "text": "running",
+              "value": "1"
+            },
+            {
+              "text": "paused",
+              "value": "2"
+            },
+            {
+              "text": "stopped",
+              "value": "3"
+            }
+          ]
         },
         {
           "alias": "name",
@@ -714,7 +719,7 @@
         {
           "alias": "Nb of tasks",
           "align": "auto",
-          "colorMode": "row",
+          "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
             "rgba(237, 129, 40, 0.89)",
@@ -751,7 +756,7 @@
         {
           "alias": "Nb of Tasks failed",
           "align": "auto",
-          "colorMode": "row",
+          "colorMode": "cell",
           "colors": [
             "rgba(50, 172, 45, 0.97)",
             "rgba(237, 129, 40, 0.89)",
@@ -779,11 +784,11 @@
         {
           "alias": "Nb of Tasks paused",
           "align": "auto",
-          "colorMode": null,
+          "colorMode": "cell",
           "colors": [
-            "rgba(245, 54, 54, 0.9)",
+            "rgba(50, 172, 45, 0.97)",
             "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
+            "rgba(245, 54, 54, 0.9)"
           ],
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 0,
@@ -800,6 +805,23 @@
               "value": "null"
             }
           ]
+        },
+        {
+          "alias": "",
+          "align": "auto",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Value #I",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
         },
         {
           "alias": "",
@@ -821,11 +843,20 @@
         {
           "expr": "kafka_connect_connector_info{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status!=\"\"}",
           "format": "table",
-          "hide": false,
+          "hide": true,
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "B"
+        },
+        {
+          "expr": "label_replace(label_replace(label_replace(kafka_connect_connector_info{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status!=\"\"}, \"status\", \"1\", \"status\", \"running\"), \"status\", \"2\", \"status\", \"paused\"), \"status\", \"3\", \"status\", \"stopped\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "I"
         },
         {
           "expr": "kafka_connect_connector_info{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",connector_type!=\"\"}",
@@ -4773,7 +4804,6 @@
         "allValue": ".+",
         "current": {
           "selected": true,
-          "tags": [],
           "text": "All",
           "value": [
             "$__all"
@@ -4828,7 +4858,6 @@
         "allValue": null,
         "current": {
           "selected": true,
-          "tags": [],
           "text": "All",
           "value": [
             "$__all"
@@ -4856,7 +4885,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {
@@ -4886,5 +4915,5 @@
   "timezone": "",
   "title": "Kafka Connect",
   "uid": "AEaSQ97mz",
-  "version": 17
+  "version": 20
 }
