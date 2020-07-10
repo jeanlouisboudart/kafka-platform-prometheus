@@ -48,7 +48,7 @@ services:
     - ./jmx-exporter:/usr/share/jmx_exporter/
 
   kafka-1:
-    image: confluentinc/cp-kafka:5.4.0
+    image: confluentinc/cp-kafka:5.5.1
     hostname: kafka-1
     ports:
       - 19092:19092
@@ -71,7 +71,7 @@ services:
     - ./jmx-exporter:/usr/share/jmx_exporter/
 
   kafka-2:
-    image: confluentinc/cp-kafka:5.4.0
+    image: confluentinc/cp-kafka:5.5.1
     hostname: kafka-2
     ports:
       - 19093:19093
@@ -94,7 +94,7 @@ services:
     - ./jmx-exporter:/usr/share/jmx_exporter/
 
   kafka-3:
-    image: confluentinc/cp-kafka:5.4.0
+    image: confluentinc/cp-kafka:5.5.1
     hostname: kafka-3
     ports:
       - 19094:19094
@@ -180,7 +180,7 @@ services:
       - kafka-3
 
   connect:
-    image: confluentinc/cp-kafka-connect:5.4.0
+    image: confluentinc/cp-kafka-connect:5.5.0
     hostname: connect
     ports:
       - "8083:8083"
@@ -241,7 +241,7 @@ services:
       - ./kafka-lag-exporter/:/opt/docker/conf/
 
   grafana:
-    image: grafana/grafana:6.6.2
+    image: grafana/grafana
     environment:
       GF_INSTALL_PLUGINS: grafana-piechart-panel
     ports:
