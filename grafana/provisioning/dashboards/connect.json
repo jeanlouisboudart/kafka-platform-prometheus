@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 5,
-  "iteration": 1594476020564,
+  "iteration": 1594476308842,
   "links": [],
   "panels": [
     {
@@ -1506,7 +1506,7 @@
       },
       "pluginVersion": "7.0.5",
       "repeat": null,
-      "repeatIteration": 1594476020564,
+      "repeatIteration": 1594476308842,
       "repeatPanelId": 230,
       "scopedVars": {
         "instance": {
@@ -5718,7 +5718,7 @@
     "to": "now"
   },
   "timepicker": {
-    "hidden": true,
+    "hidden": false,
     "refresh_intervals": [
       "10s",
       "30s",
@@ -5745,5 +5745,5 @@
   "timezone": "",
   "title": "Kafka Connect",
   "uid": "AEaSQ97mz",
-  "version": 22
+  "version": 24
 }
