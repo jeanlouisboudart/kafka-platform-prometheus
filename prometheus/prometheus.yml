@@ -69,6 +69,7 @@ scrape_configs:
           - 'connect:1234'
         labels:
           env: 'dev'
+          cluster: 'cluster1'
 
   - job_name: 'kafka-lag-exporter'
     static_configs:
