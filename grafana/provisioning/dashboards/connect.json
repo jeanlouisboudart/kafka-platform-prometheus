@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 5,
-  "iteration": 1594476308842,
+  "iteration": 1594631904957,
   "links": [],
   "panels": [
     {
@@ -41,6 +41,7 @@
           "custom": {},
           "decimals": 0,
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -76,7 +77,7 @@
       "pluginVersion": "7.0.5",
       "targets": [
         {
-          "expr": "sum (kafka_connect_connector_task_status{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status!=\"\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_total_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -131,7 +132,7 @@
       "pluginVersion": "7.0.5",
       "targets": [
         {
-          "expr": "sum (kafka_connect_connector_task_status{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status=\"running\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_running_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -157,6 +158,10 @@
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1
               }
             ]
           }
@@ -186,7 +191,7 @@
       "pluginVersion": "7.0.5",
       "targets": [
         {
-          "expr": "sum (kafka_connect_connector_task_status{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status=\"paused\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_paused_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -246,7 +251,7 @@
       "pluginVersion": "7.0.5",
       "targets": [
         {
-          "expr": "sum (kafka_connect_connector_task_status{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status=\"failed\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_failed_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -275,7 +280,7 @@
                 "value": null
               },
               {
-                "color": "red",
+                "color": "yellow",
                 "value": 1
               }
             ]
@@ -306,7 +311,7 @@
       "pluginVersion": "7.0.5",
       "targets": [
         {
-          "expr": "sum (kafka_connect_connector_task_status{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status=\"unassigned\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_unassigned_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -335,8 +340,8 @@
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "purple",
+                "value": 1
               }
             ]
           }
@@ -366,7 +371,7 @@
       "pluginVersion": "7.0.5",
       "targets": [
         {
-          "expr": "sum (kafka_connect_connector_task_status{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status=\"destroyed\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_destroyed_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -380,7 +385,10 @@
       "type": "stat"
     },
     {
-      "aliasColors": {},
+      "aliasColors": {
+        "paused": "#FF9830",
+        "running": "#73BF69"
+      },
       "breakPoint": "50%",
       "cacheTimeout": null,
       "combine": {
@@ -417,13 +425,14 @@
         "x": 0,
         "y": 4
       },
-      "id": 219,
+      "id": 227,
       "interval": null,
       "legend": {
+        "percentage": true,
         "show": true,
         "values": true
       },
-      "legendType": "Under graph",
+      "legendType": "Right side",
       "links": [],
       "maxDataPoints": 1,
       "nullPointMode": "connected",
@@ -432,28 +441,47 @@
       "strokeWidth": 1,
       "targets": [
         {
-          "expr": "sum (kafka_connect_connector_task_status{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"}) by (status)",
+          "expr": "sum (kafka_connect_connector_info{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status=\"running\"})",
           "instant": true,
           "interval": "",
-          "legendFormat": "{{status}}",
+          "legendFormat": "running",
+          "refId": "B"
+        },
+        {
+          "expr": "sum (kafka_connect_connector_info{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status=\"stopped\"})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "stopped",
           "refId": "A"
+        },
+        {
+          "expr": "sum (kafka_connect_connector_info{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status=\"paused\"})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "paused",
+          "refId": "C"
         }
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Task repartition per status",
+      "title": "Connector repartition per status",
       "type": "grafana-piechart-panel",
       "valueName": "current"
     },
     {
-      "aliasColors": {},
+      "aliasColors": {
+        "destroyed": "#B877D9",
+        "failed": "#F2495C",
+        "paused": "#FF9830",
+        "unassigned": "#FADE2A"
+      },
       "breakPoint": "50%",
       "cacheTimeout": null,
       "combine": {
         "label": "Others",
         "threshold": 0
       },
-      "datasource": null,
+      "datasource": "Prometheus",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -483,13 +511,14 @@
         "x": 12,
         "y": 4
       },
-      "id": 227,
+      "id": 219,
       "interval": null,
       "legend": {
+        "percentage": true,
         "show": true,
         "values": true
       },
-      "legendType": "Under graph",
+      "legendType": "Right side",
       "links": [],
       "maxDataPoints": 1,
       "nullPointMode": "connected",
@@ -498,18 +527,610 @@
       "strokeWidth": 1,
       "targets": [
         {
-          "expr": "sum (kafka_connect_connector_info{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status!=\"\"}) by (status)",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_running_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
-          "legendFormat": "{{status}}",
+          "legendFormat": "running",
           "refId": "A"
+        },
+        {
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_failed_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "failed",
+          "refId": "B"
+        },
+        {
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_paused_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "paused",
+          "refId": "C"
+        },
+        {
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_unassigned_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "unassigned",
+          "refId": "D"
+        },
+        {
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_destroyed_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "destroyed",
+          "refId": "E"
         }
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Connector repartition per status",
+      "title": "Task repartition per status",
       "type": "grafana-piechart-panel",
       "valueName": "current"
+    },
+    {
+      "aliasColors": {
+        "paused": "orange"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "Status of connectors over time",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "hiddenSeries": false,
+      "id": 228,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "hideEmpty": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 3,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/stopped.*/",
+          "color": "#F2495C"
+        },
+        {
+          "alias": "/paused.*/",
+          "color": "#FF9830"
+        },
+        {
+          "alias": "/running.*/",
+          "color": "#73BF69"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum (kafka_connect_connector_info{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status!=\"\"}) by (status) ",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{status}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Status of connectors",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "none",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "destroyed": "purple",
+        "failed": "red",
+        "paused": "orange",
+        "running": "green",
+        "unassigned": "yellow"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "Status of tasks over time",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "hiddenSeries": false,
+      "id": 226,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "hideEmpty": false,
+        "hideZero": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 3,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_running_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "running",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_failed_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "failed",
+          "refId": "B"
+        },
+        {
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_paused_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "paused",
+          "refId": "C"
+        },
+        {
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_destroyed_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "destroyed",
+          "refId": "D"
+        },
+        {
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_unassigned_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "unassigned",
+          "refId": "E"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Status of tasks",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "none",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "id": 221,
+      "panels": [],
+      "title": "System",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 21
+      },
+      "hiddenSeries": false,
+      "id": 223,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "rate(process_cpu_seconds_total{job=\"connect\",env=\"$env\",cluster=~\"$cluster\",instance=~\"$instance\"}[1m])",
+          "interval": "",
+          "legendFormat": "{{cluster}}-{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "CPU Usage",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percent",
+          "label": "Cores",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 21
+      },
+      "hiddenSeries": false,
+      "id": 224,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum without(area)(jvm_memory_bytes_used{job=\"connect\",env=\"$env\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+          "interval": "",
+          "legendFormat": "{{cluster}}-{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "JVM Memory Used",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "bytes",
+          "label": "Memory",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 21
+      },
+      "hiddenSeries": false,
+      "id": 225,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"connect\",env=\"$env\",cluster=~\"$cluster\",instance=~\"$instance\"}[5m]))",
+          "interval": "",
+          "legendFormat": "{{cluster}}-{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "JVM Memory Used",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": "% time in GC",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "collapsed": true,
@@ -518,7 +1139,292 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 12
+        "y": 29
+      },
+      "id": 234,
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Prometheus",
+          "description": "Rebalances average time",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {}
+            },
+            "overrides": []
+          },
+          "fill": 3,
+          "fillGradient": 3,
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 30
+          },
+          "hiddenSeries": false,
+          "id": 209,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": false,
+            "hideEmpty": false,
+            "hideZero": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 9,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "kafka_connect_connect_worker_rebalance_metrics_rebalance_avg_time_ms{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\"}",
+              "format": "time_series",
+              "hide": false,
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{cluster}}-{{instance}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Rebalances average time",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": null,
+              "format": "ms",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": "Prometheus",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "decimals": 0,
+              "mappings": [
+                {
+                  "id": 0,
+                  "op": "=",
+                  "text": "N/A",
+                  "type": 1,
+                  "value": "null"
+                }
+              ],
+              "nullValueMode": "connected",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "#299c46",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "clockms"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 12,
+            "x": 0,
+            "y": 38
+          },
+          "id": 230,
+          "interval": null,
+          "links": [],
+          "maxDataPoints": 100,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            },
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            }
+          },
+          "pluginVersion": "7.0.5",
+          "repeat": "instance",
+          "scopedVars": {
+            "instance": {
+              "selected": false,
+              "text": "connect-europe:1234",
+              "value": "connect-europe:1234"
+            }
+          },
+          "targets": [
+            {
+              "expr": "kafka_connect_connect_worker_rebalance_metrics_time_since_last_rebalance_ms{env=\"$env\",instance=~\"$instance\"}",
+              "format": "time_series",
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "title": "Time since last rebalance ($instance)",
+          "type": "stat"
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": "Prometheus",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {},
+              "decimals": 0,
+              "mappings": [
+                {
+                  "id": 0,
+                  "op": "=",
+                  "text": "N/A",
+                  "type": 1,
+                  "value": "null"
+                }
+              ],
+              "nullValueMode": "connected",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "#299c46",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "clockms"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 12,
+            "x": 12,
+            "y": 38
+          },
+          "id": 239,
+          "interval": null,
+          "links": [],
+          "maxDataPoints": 100,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "lastNotNull"
+              ]
+            },
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            }
+          },
+          "pluginVersion": "7.0.5",
+          "repeat": null,
+          "repeatIteration": 1594631904957,
+          "repeatPanelId": 230,
+          "scopedVars": {
+            "instance": {
+              "selected": false,
+              "text": "connect-us:1234",
+              "value": "connect-us:1234"
+            }
+          },
+          "targets": [
+            {
+              "expr": "kafka_connect_connect_worker_rebalance_metrics_time_since_last_rebalance_ms{env=\"$env\",instance=~\"$instance\"}",
+              "format": "time_series",
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "title": "Time since last rebalance ($instance)",
+          "type": "stat"
+        }
+      ],
+      "title": "Rebalances",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 30
       },
       "id": 132,
       "panels": [
@@ -536,7 +1442,7 @@
             "h": 11,
             "w": 24,
             "x": 0,
-            "y": 13
+            "y": 31
           },
           "id": 129,
           "pageSize": 100,
@@ -651,20 +1557,23 @@
               "unit": "short"
             },
             {
-              "alias": "",
+              "alias": "Nb of Tasks destroyed",
               "align": "auto",
-              "colorMode": null,
+              "colorMode": "cell",
               "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
+                "rgba(50, 172, 45, 0.97)",
+                "#B877D9",
+                "#B877D9"
               ],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "decimals": 2,
+              "decimals": 0,
+              "link": false,
               "mappingType": 1,
               "pattern": "Value #B",
-              "thresholds": [],
-              "type": "hidden",
+              "thresholds": [
+                "1"
+              ],
+              "type": "number",
               "unit": "short"
             },
             {
@@ -805,7 +1714,7 @@
             {
               "alias": "Nb of tasks",
               "align": "auto",
-              "colorMode": null,
+              "colorMode": "cell",
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
                 "rgba(237, 129, 40, 0.89)",
@@ -825,7 +1734,7 @@
             {
               "alias": "Nb of Tasks running",
               "align": "auto",
-              "colorMode": null,
+              "colorMode": "cell",
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
                 "rgba(237, 129, 40, 0.89)",
@@ -835,7 +1744,10 @@
               "decimals": 0,
               "mappingType": 1,
               "pattern": "Value #F",
-              "thresholds": [],
+              "thresholds": [
+                "0",
+                "1"
+              ],
               "type": "number",
               "unit": "short"
             },
@@ -845,8 +1757,8 @@
               "colorMode": "cell",
               "colors": [
                 "rgba(50, 172, 45, 0.97)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(245, 54, 54, 0.9)"
+                "#F2495C",
+                "#F2495C"
               ],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "decimals": 0,
@@ -855,7 +1767,6 @@
               "pattern": "Value #G",
               "preserveFormat": false,
               "thresholds": [
-                "0",
                 "1"
               ],
               "type": "number",
@@ -873,15 +1784,15 @@
               "colorMode": "cell",
               "colors": [
                 "rgba(50, 172, 45, 0.97)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(245, 54, 54, 0.9)"
+                "#FF9830",
+                "#FF9830"
               ],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "decimals": 0,
               "mappingType": 1,
               "pattern": "Value #H",
               "thresholds": [
-                "0"
+                "1"
               ],
               "type": "number",
               "unit": "short",
@@ -907,6 +1818,25 @@
               "pattern": "Value #I",
               "thresholds": [],
               "type": "hidden",
+              "unit": "short"
+            },
+            {
+              "alias": "Nb of Tasks unassigned",
+              "align": "auto",
+              "colorMode": "cell",
+              "colors": [
+                "rgba(50, 172, 45, 0.97)",
+                "#FADE2A",
+                "#FADE2A"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 0,
+              "mappingType": 1,
+              "pattern": "Value #J",
+              "thresholds": [
+                "1"
+              ],
+              "type": "number",
               "unit": "short"
             },
             {
@@ -961,7 +1891,7 @@
               "refId": "D"
             },
             {
-              "expr": "sum by (connector) (kafka_connect_connector_task_status{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+              "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_total_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
               "format": "table",
               "hide": false,
               "instant": true,
@@ -970,7 +1900,7 @@
               "refId": "E"
             },
             {
-              "expr": "sum by (connector) (kafka_connect_connector_task_status{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status=\"running\"})",
+              "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_running_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
               "format": "table",
               "instant": true,
               "interval": "",
@@ -978,7 +1908,7 @@
               "refId": "F"
             },
             {
-              "expr": "sum by (connector) (kafka_connect_connector_task_status{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status=\"failed\"})",
+              "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_failed_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
               "format": "table",
               "instant": true,
               "interval": "",
@@ -986,12 +1916,28 @@
               "refId": "G"
             },
             {
-              "expr": "sum by (connector) (kafka_connect_connector_task_status{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status=\"paused\"})",
+              "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_paused_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
               "format": "table",
               "instant": true,
               "interval": "",
               "legendFormat": "",
               "refId": "H"
+            },
+            {
+              "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_destroyed_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+              "format": "table",
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "B"
+            },
+            {
+              "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_unassigned_task_count{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+              "format": "table",
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "J"
             }
           ],
           "timeFrom": null,
@@ -1000,830 +1946,10 @@
           "transform": "table",
           "transformations": [],
           "type": "table-old"
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "Prometheus",
-          "description": "Status of tasks over time",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
-          },
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 24
-          },
-          "hiddenSeries": false,
-          "id": 226,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "hideEmpty": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 3,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "/failed.*/",
-              "color": "#F2495C"
-            },
-            {
-              "alias": "/paused.*/",
-              "color": "#FF9830"
-            },
-            {
-              "alias": "/running.*/",
-              "color": "#73BF69"
-            },
-            {
-              "alias": "/destroyed.*/",
-              "color": "#B877D9"
-            },
-            {
-              "alias": "/unassigned.*/",
-              "color": "#FADE2A"
-            }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum (kafka_connect_connector_task_status{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status!=\"\"}) by (status) ",
-              "format": "time_series",
-              "hide": false,
-              "instant": false,
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{status}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Status of tasks",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "none",
-              "label": "",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "Prometheus",
-          "description": "Status of connectors over time",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
-          },
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 24
-          },
-          "hiddenSeries": false,
-          "id": 228,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "hideEmpty": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 3,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "/stopped.*/",
-              "color": "#F2495C"
-            },
-            {
-              "alias": "/paused.*/",
-              "color": "#FF9830"
-            },
-            {
-              "alias": "/running.*/",
-              "color": "#73BF69"
-            }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum (kafka_connect_connector_info{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status!=\"\"}) by (status) ",
-              "format": "time_series",
-              "hide": false,
-              "instant": false,
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{status}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Status of connectors",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "none",
-              "label": "",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
         }
       ],
       "title": "Connector details",
       "type": "row"
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 13
-      },
-      "id": 234,
-      "panels": [],
-      "title": "Rebalances",
-      "type": "row"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "description": "Rebalances average time",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "fill": 3,
-      "fillGradient": 3,
-      "gridPos": {
-        "h": 8,
-        "w": 24,
-        "x": 0,
-        "y": 14
-      },
-      "hiddenSeries": false,
-      "id": 209,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "hideEmpty": false,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null as zero",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 9,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "kafka_connect_connect_worker_rebalance_metrics_rebalance_avg_time_ms{env=\"$env\",instance=~\"$instance\",cluster=~\"$cluster\"}",
-          "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{cluster}}-{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Rebalances average time",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": null,
-          "format": "ms",
-          "label": "",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "cacheTimeout": null,
-      "datasource": "Prometheus",
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "decimals": 0,
-          "mappings": [
-            {
-              "id": 0,
-              "op": "=",
-              "text": "N/A",
-              "type": 1,
-              "value": "null"
-            }
-          ],
-          "nullValueMode": "connected",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#299c46",
-                "value": null
-              }
-            ]
-          },
-          "unit": "clockms"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 12,
-        "x": 0,
-        "y": 22
-      },
-      "id": 230,
-      "interval": null,
-      "links": [],
-      "maxDataPoints": 100,
-      "options": {
-        "colorMode": "value",
-        "fieldOptions": {
-          "calcs": [
-            "lastNotNull"
-          ]
-        },
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        }
-      },
-      "pluginVersion": "7.0.5",
-      "repeat": "instance",
-      "scopedVars": {
-        "instance": {
-          "selected": false,
-          "text": "connect-us:1234",
-          "value": "connect-us:1234"
-        }
-      },
-      "targets": [
-        {
-          "expr": "kafka_connect_connect_worker_rebalance_metrics_time_since_last_rebalance_ms{env=\"$env\",instance=~\"$instance\"}",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Time since last rebalance ($instance)",
-      "type": "stat"
-    },
-    {
-      "cacheTimeout": null,
-      "datasource": "Prometheus",
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "decimals": 0,
-          "mappings": [
-            {
-              "id": 0,
-              "op": "=",
-              "text": "N/A",
-              "type": 1,
-              "value": "null"
-            }
-          ],
-          "nullValueMode": "connected",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#299c46",
-                "value": null
-              }
-            ]
-          },
-          "unit": "clockms"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 12,
-        "x": 12,
-        "y": 22
-      },
-      "id": 237,
-      "interval": null,
-      "links": [],
-      "maxDataPoints": 100,
-      "options": {
-        "colorMode": "value",
-        "fieldOptions": {
-          "calcs": [
-            "lastNotNull"
-          ]
-        },
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        }
-      },
-      "pluginVersion": "7.0.5",
-      "repeat": null,
-      "repeatIteration": 1594476308842,
-      "repeatPanelId": 230,
-      "scopedVars": {
-        "instance": {
-          "selected": false,
-          "text": "connect-europe:1234",
-          "value": "connect-europe:1234"
-        }
-      },
-      "targets": [
-        {
-          "expr": "kafka_connect_connect_worker_rebalance_metrics_time_since_last_rebalance_ms{env=\"$env\",instance=~\"$instance\"}",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Time since last rebalance ($instance)",
-      "type": "stat"
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 26
-      },
-      "id": 221,
-      "panels": [],
-      "title": "System",
-      "type": "row"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 0,
-        "y": 27
-      },
-      "hiddenSeries": false,
-      "id": 223,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "rate(process_cpu_seconds_total{job=\"connect\",env=\"$env\",cluster=~\"$cluster\",instance=~\"$instance\"}[1m])",
-          "interval": "",
-          "legendFormat": "{{cluster}}-{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "CPU Usage",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percent",
-          "label": "Cores",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 8,
-        "y": 27
-      },
-      "hiddenSeries": false,
-      "id": 224,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum without(area)(jvm_memory_bytes_used{job=\"connect\",env=\"$env\",cluster=~\"$cluster\",instance=~\"$instance\"})",
-          "interval": "",
-          "legendFormat": "{{cluster}}-{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "JVM Memory Used",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "bytes",
-          "label": "Memory",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 27
-      },
-      "hiddenSeries": false,
-      "id": 225,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"connect\",env=\"$env\",cluster=~\"$cluster\",instance=~\"$instance\"}[5m]))",
-          "interval": "",
-          "legendFormat": "{{cluster}}-{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "JVM Memory Used",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": "% time in GC",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
     },
     {
       "collapsed": true,
@@ -1832,7 +1958,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 35
+        "y": 31
       },
       "id": 195,
       "panels": [
@@ -1862,7 +1988,7 @@
             "h": 4,
             "w": 12,
             "x": 0,
-            "y": 36
+            "y": 43
           },
           "id": 130,
           "interval": null,
@@ -1891,8 +2017,8 @@
           "scopedVars": {
             "instance": {
               "selected": false,
-              "text": "connect-us:1234",
-              "value": "connect-us:1234"
+              "text": "connect-europe:1234",
+              "value": "connect-europe:1234"
             }
           },
           "targets": [
@@ -1935,9 +2061,9 @@
             "h": 4,
             "w": 12,
             "x": 12,
-            "y": 36
+            "y": 43
           },
-          "id": 236,
+          "id": 238,
           "interval": null,
           "links": [],
           "maxDataPoints": 100,
@@ -1961,13 +2087,13 @@
           },
           "pluginVersion": "7.0.5",
           "repeat": null,
-          "repeatIteration": 1594475974814,
+          "repeatIteration": 1594631904955,
           "repeatPanelId": 130,
           "scopedVars": {
             "instance": {
               "selected": false,
-              "text": "connect-europe:1234",
-              "value": "connect-europe:1234"
+              "text": "connect-us:1234",
+              "value": "connect-us:1234"
             }
           },
           "targets": [
@@ -1995,7 +2121,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 36
+        "y": 32
       },
       "id": 97,
       "panels": [
@@ -2013,7 +2139,7 @@
             "h": 11,
             "w": 24,
             "x": 0,
-            "y": 60
+            "y": 44
           },
           "id": 146,
           "pageSize": 100,
@@ -2482,7 +2608,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 71
+            "y": 55
           },
           "hiddenSeries": false,
           "id": 95,
@@ -2581,7 +2707,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 71
+            "y": 55
           },
           "hiddenSeries": false,
           "id": 91,
@@ -2679,7 +2805,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 71
+            "y": 55
           },
           "hiddenSeries": false,
           "id": 171,
@@ -2777,7 +2903,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 78
+            "y": 62
           },
           "hiddenSeries": false,
           "id": 169,
@@ -2877,7 +3003,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 78
+            "y": 62
           },
           "hiddenSeries": false,
           "id": 170,
@@ -2977,7 +3103,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 78
+            "y": 62
           },
           "hiddenSeries": false,
           "id": 174,
@@ -3077,7 +3203,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 85
+            "y": 69
           },
           "hiddenSeries": false,
           "id": 172,
@@ -3175,7 +3301,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 85
+            "y": 69
           },
           "hiddenSeries": false,
           "id": 173,
@@ -3273,7 +3399,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 85
+            "y": 69
           },
           "hiddenSeries": false,
           "id": 93,
@@ -3363,7 +3489,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 37
+        "y": 33
       },
       "id": 112,
       "panels": [
@@ -3386,7 +3512,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 46
+            "y": 45
           },
           "hiddenSeries": false,
           "id": 113,
@@ -3484,7 +3610,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 46
+            "y": 45
           },
           "hiddenSeries": false,
           "id": 114,
@@ -3582,7 +3708,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 53
+            "y": 52
           },
           "hiddenSeries": false,
           "id": 115,
@@ -3680,7 +3806,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 53
+            "y": 52
           },
           "hiddenSeries": false,
           "id": 116,
@@ -3778,7 +3904,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 60
+            "y": 59
           },
           "hiddenSeries": false,
           "id": 118,
@@ -3877,7 +4003,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 60
+            "y": 59
           },
           "hiddenSeries": false,
           "id": 117,
@@ -3968,7 +4094,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 34
       },
       "id": 201,
       "panels": [
@@ -4678,7 +4804,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 39
+        "y": 35
       },
       "id": 139,
       "panels": [
@@ -5288,7 +5414,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 40
+        "y": 36
       },
       "id": 134,
       "panels": [
@@ -5597,7 +5723,7 @@
       "type": "row"
     }
   ],
-  "refresh": false,
+  "refresh": "5s",
   "schemaVersion": 25,
   "style": "dark",
   "tags": [],
@@ -5632,7 +5758,7 @@
       {
         "allValue": ".+",
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": [
             "$__all"
@@ -5687,6 +5813,7 @@
         "allValue": null,
         "current": {
           "selected": true,
+          "tags": [],
           "text": "All",
           "value": [
             "$__all"
@@ -5714,7 +5841,7 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
@@ -5745,5 +5872,5 @@
   "timezone": "",
   "title": "Kafka Connect",
   "uid": "AEaSQ97mz",
-  "version": 24
+  "version": 29
 }
