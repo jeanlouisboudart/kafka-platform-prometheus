@@ -48,7 +48,7 @@ services:
     - ./jmx-exporter:/usr/share/jmx_exporter/
 
   kafka-1:
-    image: confluentinc/cp-kafka:5.4.0
+    image: confluentinc/cp-kafka:5.5.1
     hostname: kafka-1
     ports:
       - 19092:19092
@@ -71,7 +71,7 @@ services:
     - ./jmx-exporter:/usr/share/jmx_exporter/
 
   kafka-2:
-    image: confluentinc/cp-kafka:5.4.0
+    image: confluentinc/cp-kafka:5.5.1
     hostname: kafka-2
     ports:
       - 19093:19093
@@ -94,7 +94,7 @@ services:
     - ./jmx-exporter:/usr/share/jmx_exporter/
 
   kafka-3:
-    image: confluentinc/cp-kafka:5.4.0
+    image: confluentinc/cp-kafka:5.5.1
     hostname: kafka-3
     ports:
       - 19094:19094
@@ -179,6 +179,34 @@ services:
       - kafka-2
       - kafka-3
 
+  connect:
+    image: confluentinc/cp-kafka-connect:5.5.0
+    hostname: connect
+    ports:
+      - "8083:8083"
+    environment:
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-connect.yml -Xmx256M -Xms256M
+      CONNECT_BOOTSTRAP_SERVERS: 'kafka-1:9092,kafka-2:9092,kafka-3:9092'
+      CONNECT_REST_ADVERTISED_HOST_NAME: connect
+      CONNECT_GROUP_ID: "connect-cluster"
+      CONNECT_PRODUCER_CLIENT_ID: "connect-worker-producer"
+      CONNECT_CONFIG_STORAGE_TOPIC: connect-configs
+      CONNECT_OFFSET_STORAGE_TOPIC: connect-offsets
+      CONNECT_STATUS_STORAGE_TOPIC: connect-status
+      CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.storage.StringConverter"
+      CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.storage.StringConverter"
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
+      CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
+    volumes:
+    - ./jmx-exporter:/usr/share/jmx_exporter/
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+
   prometheus:
     image: prom/prometheus:v2.11.1
     ports:
@@ -213,7 +241,7 @@ services:
       - ./kafka-lag-exporter/:/opt/docker/conf/
 
   grafana:
-    image: grafana/grafana:6.6.2
+    image: grafana/grafana:7.0.6
     environment:
       GF_INSTALL_PLUGINS: grafana-piechart-panel
     ports:
