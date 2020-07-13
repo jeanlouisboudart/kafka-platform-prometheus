@@ -241,7 +241,7 @@ services:
       - ./kafka-lag-exporter/:/opt/docker/conf/
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:7.0.6
     environment:
       GF_INSTALL_PLUGINS: grafana-piechart-panel
     ports:
