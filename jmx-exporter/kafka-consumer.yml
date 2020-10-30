@@ -13,7 +13,7 @@ rules:
   labels:
     client-id: "$2"
     host-id: "$3"
-- pattern : 'kafka.consumer<type=(.+), client-id=(.+), topic=(.+), partition=(.+)><>(.+):'
+- pattern : 'kafka.consumer<type=(.+), client-id=(.+), partition=(.+), topic=(.+)><>(.+):'
   name: kafka_consumer_$1_$5
   type: GAUGE
   labels:
