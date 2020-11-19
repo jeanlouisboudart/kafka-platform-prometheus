@@ -248,3 +248,25 @@ services:
       - 3000:3000
     volumes:
       - ./grafana/provisioning/:/etc/grafana/provisioning/
+
+  base:
+    image: confluentinc/cp-kafka-connect:6.0.0
+    container_name: base
+    hostname: base
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+    command: /bin/sh
+    tty: true
+
+  akhq:
+    image: tchiotludo/akhq:latest
+    ports:
+      - 8080:8080
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+    volumes:
+      - ./akhq/application.yml:/app/application.yml
