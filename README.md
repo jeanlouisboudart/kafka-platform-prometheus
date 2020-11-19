@@ -24,7 +24,6 @@ To build all images you just need to run :
 ```bash
 docker-compose build
 ```
-
 # Start the environment
 To start the environment simply run the following command
 ```bash
@@ -164,3 +163,8 @@ This is using [kafka-lag-exporter](https://github.com/lightbend/kafka-lag-export
 ### Connect Dashboard
 
 ![Connect](./images/connect1.jpg)
+
+
+### Kafka Streams Dashboard
+
+![Kafka Streams](./images/streams1.jpg)
