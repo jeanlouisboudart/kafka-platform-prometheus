@@ -57,7 +57,7 @@ Open a new terminal window and generate random messages to simulate producer loa
 
 ```bash
 docker-compose exec base /bin/sh
-docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-producer-perf-test --throughput 500 --num-records 100000000 --topic demo-perf-topic --record-size 100 --producer-props bootstrap.servers=kafka-1:9092'
+kafka-producer-perf-test --throughput 500 --num-records 100000000 --topic demo-perf-topic --record-size 100 --producer-props bootstrap.servers=kafka-1:9092
 ```
 
 ## Consumes random messages
