@@ -4,7 +4,7 @@ services:
     build: ./sample-application/consumer
     hostname: consumer-1
     environment:
-      JAVA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-consumer.yml -Xmx256M -Xms256M
+      JAVA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.14.0.jar=1234:/usr/share/jmx_exporter/kafka-consumer.yml -Xmx256M -Xms256M
       KAFKA_BOOTSTRAP_SERVERS: "kafka-1:9092, kafka-2:9092, kafka-3:9092"
       TOPIC: "workshop_topic_2"
       CHECK_GAPS: "false"

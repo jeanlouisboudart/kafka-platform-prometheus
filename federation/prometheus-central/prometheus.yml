@@ -1,0 +1,30 @@
+global:
+  scrape_interval:     5s # By default, scrape targets every 15 seconds.
+  evaluation_interval: 5s # By default, scrape targets every 15 seconds.
+
+scrape_configs:
+
+  - job_name: 'kafka-lag-exporter'
+    static_configs:
+      - targets:
+        - 'kafka-lag-exporter:9999'
+        labels:
+           env: 'dev'
+
+  - job_name: 'federate'
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{job="connect"}'
+        - '{job="consumer"}'
+        - '{job="kafka"}'
+        - '{job="producer"}'
+        - '{job="streams"}'
+        - '{job="zookeeper"}'
+    static_configs:
+      - targets:
+        - 'prometheus-1:9090'
+        - 'prometheus-2:9090'
+        labels:
+           env: 'dev'

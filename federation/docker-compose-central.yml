@@ -1,0 +1,32 @@
+version: "2.4"
+services:
+
+  prometheus:
+    image: prom/prometheus:v2.11.1
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus-central/:/etc/prometheus/
+
+  kafka-lag-exporter:
+    image: lightbend/kafka-lag-exporter:0.6.5
+    hostname: kafka-lag-exporter
+    restart: always
+    ports:
+      - 9999:9999
+    volumes:
+      - ./kafka-lag-exporter/:/opt/docker/conf/
+
+  grafana:
+    image: grafana/grafana:7.3.3
+    environment:
+      GF_INSTALL_PLUGINS: grafana-piechart-panel
+    ports:
+      - 3000:3000
+    volumes:
+      - ../grafana/provisioning/:/etc/grafana/provisioning/
+
+networks:
+  default:
+    external:
+      name: network-federate
