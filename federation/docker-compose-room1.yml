@@ -1,0 +1,152 @@
+version: "3"
+services:
+
+  zookeeper-1:
+    image: confluentinc/cp-zookeeper:6.0.0
+    hostname: zookeeper-1
+    ports:
+      - 12181:2181
+    environment:
+      ZOOKEEPER_SERVER_ID: "1"
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
+      ZOOKEEPER_4LW_COMMANDS_WHITELIST: "*"
+      EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.14.0.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
+    volumes:
+    - ../jmx-exporter:/usr/share/jmx_exporter/
+
+  zookeeper-2:
+    image: confluentinc/cp-zookeeper:6.0.0
+    hostname: zookeeper-2
+    ports:
+      - 12182:2181
+    environment:
+      ZOOKEEPER_SERVER_ID: "2"
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
+      ZOOKEEPER_4LW_COMMANDS_WHITELIST: "*"
+      EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.14.0.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
+    volumes:
+    - ../jmx-exporter:/usr/share/jmx_exporter/
+
+  kafka-1:
+    image: confluentinc/cp-kafka:6.0.0
+    hostname: kafka-1
+    ports:
+      - 19092:19092
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+    environment:
+      KAFKA_LISTENERS: "INTERNAL://kafka-1:9092,EXTERNAL://:19092"
+      KAFKA_ADVERTISED_LISTENERS: "INTERNAL://kafka-1:9092,EXTERNAL://localhost:19092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181"
+      KAFKA_BROKER_ID: "1"
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.14.0.jar=1234:/usr/share/jmx_exporter/kafka-broker.yml
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+    volumes:
+    - ../jmx-exporter:/usr/share/jmx_exporter/
+
+  kafka-2:
+    image: confluentinc/cp-kafka:6.0.0
+    hostname: kafka-2
+    ports:
+      - 19093:19093
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181"
+      KAFKA_LISTENERS: "INTERNAL://kafka-2:9092,EXTERNAL://:19093"
+      KAFKA_ADVERTISED_LISTENERS: "INTERNAL://kafka-2:9092,EXTERNAL://localhost:19093"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_BROKER_ID: "2"
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.14.0.jar=1234:/usr/share/jmx_exporter/kafka-broker.yml
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+    volumes:
+    - ../jmx-exporter:/usr/share/jmx_exporter/
+
+  kafka-3:
+    image: confluentinc/cp-kafka:6.0.0
+    hostname: kafka-3
+    ports:
+      - 19094:19094
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181"
+      KAFKA_LISTENERS: "INTERNAL://kafka-3:9092,EXTERNAL://:19094"
+      KAFKA_ADVERTISED_LISTENERS: "INTERNAL://kafka-3:9092,EXTERNAL://localhost:19094"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_BROKER_ID: "3"
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.14.0.jar=1234:/usr/share/jmx_exporter/kafka-broker.yml
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+    volumes:
+    - ../jmx-exporter:/usr/share/jmx_exporter/
+
+  producer-1:
+    build: ../sample-application/producer
+    hostname: producer-1
+    environment:
+      JAVA_OPTS: "-javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.14.0.jar=1234:/usr/share/jmx_exporter/kafka-producer.yml -Xmx256M -Xms256M"
+      KAFKA_BOOTSTRAP_SERVERS: "kafka-1:9092, kafka-2:9092, kafka-3:9092"
+      TOPIC: "sample"
+      REPLICATION_FACTOR: 3
+      NUMBER_OF_PARTITIONS: 2
+      MESSAGE_BACKOFF: 100 # Frequency of message injection
+      KAFKA_ACKS: "all" # default: "1"
+      #KAFKA_ENABLE_IDEMPOTENCE: "true"
+      #KAFKA_MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION: "5" # default: 5
+      #KAFKA_RETRIES: "10" # default: Integer.MAX_VALUE
+      #KAFKA_REQUEST_TIMEOUT_MS: "900" # default: 30000
+      #KAFKA_DELIVERY_TIMEOUT_MS: "1000" # default: 120000
+      #KAFKA_TRANSACTIONAL_ID: "prod-1"
+    volumes:
+    - ../jmx-exporter:/usr/share/jmx_exporter/
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+
+  consumer-1:
+    build: ../sample-application/consumer
+    hostname: consumer-1
+    environment:
+      JAVA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.14.0.jar=1234:/usr/share/jmx_exporter/kafka-consumer.yml -Xmx256M -Xms256M
+      KAFKA_BOOTSTRAP_SERVERS: "kafka-1:9092, kafka-2:9092, kafka-3:9092"
+      TOPIC: "sample"
+      CHECK_GAPS: "false"
+      COMMIT_STRATEGY: "AUTO_COMMIT" # possible values AUTO_COMMIT or PER_BATCH or PER_MESSAGES
+      #KAFKA_ENABLE_AUTO_COMMIT_CONFIG: "false" # default true if group.id is provided
+      #KAFKA_ISOLATION_LEVEL_CONFIG: "read_committed" # default read_uncommitted
+      # default: org.apache.kafka.clients.consumer.RangeAssignor
+      #KAFKA_PARTITION_ASSIGNMENT_STRATEGY_CONFIG: "org.apache.kafka.clients.consumer.CooperativeStickyAssignor"
+    volumes:
+    - ../jmx-exporter:/usr/share/jmx_exporter/
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+
+  prometheus-1:
+    image: prom/prometheus:v2.11.1
+    volumes:
+      - ./prometheus-room1/:/etc/prometheus/
+
+networks:
+  default:
+    external:
+      name: network-federate
