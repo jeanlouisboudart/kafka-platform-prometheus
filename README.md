@@ -161,3 +161,5 @@ This is using [kafka-lag-exporter](https://github.com/lightbend/kafka-lag-export
 ### Connect Dashboard
 
 ![Connect](./images/connect1.jpg)
+
+![Connect Sink](./images/connect2.jpg)
