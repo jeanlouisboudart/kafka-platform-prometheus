@@ -5,3 +5,4 @@ target
 .project
 .classpath
 .vscode
+.DS_Store

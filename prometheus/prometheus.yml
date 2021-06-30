@@ -59,7 +59,14 @@ scrape_configs:
   - job_name: 'streams'
     static_configs:
       - targets:
-          - "streams:1234"
+          - 'streams:1234'
+        labels:
+          env: 'dev'
+
+  - job_name: 'ksql'
+    static_configs:
+      - targets:
+          - 'ksqldb:1234'
         labels:
           env: 'dev'
 
@@ -77,3 +84,4 @@ scrape_configs:
         - 'kafka-lag-exporter:9999'
         labels:
            env: 'dev'
+

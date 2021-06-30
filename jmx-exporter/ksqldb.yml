@@ -1,0 +1,11 @@
+lowercaseOutputName: true
+lowercaseOutputLabelNames: true
+rules:
+  - pattern: 'io.confluent.ksql.metrics<type=ksql-engine-query-stats><>([^:]+)'
+    name: $1
+  - pattern: 'io.confluent.ksql.metrics<type=ksql-queries><>([^:]+)'
+    name: $1
+  - pattern: 'io.confluent.ksql.metrics<type=producer-metrics><>([^:]+)'
+    name: $1
+  - pattern: 'io.confluent.ksql.metrics<type=consumer-metrics><>([^:]+)'
+    name: $1
