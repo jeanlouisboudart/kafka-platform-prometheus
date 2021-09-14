@@ -7,8 +7,9 @@ RUN mvn dependency:go-offline -B
 COPY src src
 RUN mvn clean install -Dmaven.test.skip -B
 
-FROM adoptopenjdk/openjdk11:alpine
-RUN apk add bash
+# FROM adoptopenjdk/openjdk11:alpine
+# RUN apk add bash
+FROM eclipse-temurin:11
 WORKDIR /app
 COPY --from=mavenBuild ./app/target/*.jar ./
 ENV JAVA_OPTS ""
