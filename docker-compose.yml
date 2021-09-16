@@ -162,7 +162,7 @@ services:
     build: ./sample-application/streams
     hostname: streams-1
     environment:
-      JAVA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.16.1.jar=1234:/usr/share/jmx_exporter/kafka-streams-pre-2.5.yml -Xmx256M -Xms256M
+      JAVA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.16.1.jar=1234:/usr/share/jmx_exporter/kafka-streams-post-2.5.yml -Xmx256M -Xms256M
       KAFKA_BOOTSTRAP_SERVERS: "kafka-1:9092, kafka-2:9092, kafka-3:9092"
       INPUT_TOPIC: "sample"
       OUTPUT_TOPIC: "count-even-odd-entries"
@@ -170,6 +170,7 @@ services:
       NUMBER_OF_PARTITIONS: 2
       KAFKA_PROCESSING_GUARANTEE: "exactly_once"
       KAFKA_METRICS_RECORDING_LEVEL: "DEBUG"
+      KAFKA_NUM_STREAM_THREADS: "2"
     volumes:
     - ./jmx-exporter:/usr/share/jmx_exporter/
     depends_on:
