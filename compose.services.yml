@@ -11,7 +11,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
       ZOOKEEPER_4LW_COMMANDS_WHITELIST: "*"
-      EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
+      EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.16.1.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
     volumes:
       - ./jmx-exporter:/usr/share/jmx_exporter/
@@ -26,7 +26,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
       ZOOKEEPER_4LW_COMMANDS_WHITELIST: "*"
-      EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
+      EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.16.1.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
     volumes:
       - ./jmx-exporter:/usr/share/jmx_exporter/
@@ -41,7 +41,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
       ZOOKEEPER_4LW_COMMANDS_WHITELIST: "*"
-      EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
+      EXTRA_ARGS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.16.1.jar=1234:/usr/share/jmx_exporter/zookeeper.yml
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
     volumes:
       - ./jmx-exporter:/usr/share/jmx_exporter/
@@ -59,7 +59,7 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181"
       KAFKA_BROKER_ID: "1"
-      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-broker.yml
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.16.1.jar=1234:/usr/share/jmx_exporter/kafka-broker.yml
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
       KAFKA_MIN_INSYNC_REPLICAS: 2
     volumes:
@@ -78,7 +78,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
       KAFKA_BROKER_ID: "2"
-      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-broker.yml
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.16.1.jar=1234:/usr/share/jmx_exporter/kafka-broker.yml
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
       KAFKA_MIN_INSYNC_REPLICAS: 2
     volumes:
@@ -97,7 +97,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
       KAFKA_BROKER_ID: "3"
-      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-broker.yml
+      KAFKA_OPTS: -javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.16.1.jar=1234:/usr/share/jmx_exporter/kafka-broker.yml
       KAFKA_HEAP_OPTS: "-Xmx512M -Xms512M"
       KAFKA_MIN_INSYNC_REPLICAS: 2
     volumes:
@@ -106,7 +106,7 @@ services:
   producer:
     build: ./sample-application/producer
     environment:
-      JAVA_OPTS: "-javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.12.0.jar=1234:/usr/share/jmx_exporter/kafka-producer.yml -Xmx256M -Xms256M"
+      JAVA_OPTS: "-javaagent:/usr/share/jmx_exporter/jmx_prometheus_javaagent-0.16.1.jar=1234:/usr/share/jmx_exporter/kafka-producer.yml -Xmx256M -Xms256M"
       KAFKA_BOOTSTRAP_SERVERS: "kafka-1:9092, kafka-2:9092, kafka-3:9092"
       TOPIC: "workshop_topic"
       REPLICATION_FACTOR: 3
