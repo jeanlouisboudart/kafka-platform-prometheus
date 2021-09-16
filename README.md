@@ -130,6 +130,9 @@ docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-console-consumer -boots
 
 ![Throughput](./images/kafka2.jpg)
 
+### Kafka Streams Dashboard
+
+![Metrics](./images/streams1.jpg)
 
 ### Producer Dashboard
 
