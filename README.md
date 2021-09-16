@@ -2,30 +2,35 @@
 
 Simple demo of how to monitor Kafka Platform using Prometheus and Grafana.
 
-# Prerequisites
+## Metrics Documentation
+
+* [Broker Metrics](broker.metrics.md)
+* [Consumer Metrics](consumer.metrics.md)
+* [Cluster Healthcheck Metrics](cluster-healthcheck.metrics.md)
+  
+## Prerequisites
 
 You need to have docker and docker-compose installed.
 
-# Getting started
+## Getting started
 
 ```bash
 git clone https://github.com/jeanlouisboudart/kafka-platform-prometheus.git
 cd kafka-platform-prometheus
 ```
 
-# Build local images
-This repository contains some local docker images including :
+### Build local images
+This repository contains some local docker images including:
 * jmx_exporter
 * a simple producer
-* as simple consumer
+* a simple consumer
 
-To build all images you just need to run :
-
+To build all images you just need to run:
 ```bash
 docker-compose build
 ```
 
-# Start the environment
+### Start the environment
 To start the environment simply run the following command
 ```bash
 docker-compose up -d
@@ -34,15 +39,15 @@ docker-compose up -d
 Open a brower and visit http://localhost:3000 (grafana).
 Login/password is admin/admin.
 
-# Destroy the environment
-To destroy the environment simply run the following command to destroy containers and associated volumes :
+### Destroy the environment
+To destroy the environment simply run the following command to destroy containers and associated volumes:
 ```bash
 docker-compose down -v
 ```
 
-# Advanced
+## Advanced
 
-## Create a topic
+### Create a topic
 
 Create `demo-perf-topic` with 4 partitions and 3 replicas.
 
@@ -50,7 +55,7 @@ Create `demo-perf-topic` with 4 partitions and 3 replicas.
 docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-topics --create --partitions 4 --replication-factor 3 --topic demo-perf-topic --zookeeper zookeeper-1:2181'
 ```
 
-## Produces random messages
+### Produces random messages
 
 Open a new terminal window and generate random messages to simulate producer load.
 
@@ -58,7 +63,7 @@ Open a new terminal window and generate random messages to simulate producer loa
 docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-producer-perf-test --throughput 500 --num-records 100000000 --topic demo-perf-topic --record-size 100 --producer-props bootstrap.servers=kafka-1:9092'
 ```
 
-## Consumes random messages
+### Consumes random messages
 
 Open a new terminal window and generate random messages to simulate consumer load.
 
@@ -66,7 +71,7 @@ Open a new terminal window and generate random messages to simulate consumer loa
 docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-consumer-perf-test --messages 100000000 --threads 1 --topic demo-perf-topic --broker-list kafka-1:9092 --timeout 60000'
 ```
 
-## Create a sink connector
+### Create a sink connector
 
 ```bash
 docker-compose exec connect \
@@ -87,7 +92,7 @@ Verify that data is written to file `/tmp/test.sink.txt`:
 docker-compose exec connect bash -c 'tail -10 /tmp/test.sink.txt'
 ```
 
-## Create a topic
+### Create a topic
 
 Create `demo-perf-topic-copy` with 4 partitions and 3 replicas.
 
@@ -95,7 +100,7 @@ Create `demo-perf-topic-copy` with 4 partitions and 3 replicas.
 docker-compose exec kafka-1 bash -c 'KAFKA_OPTS="" kafka-topics --create --partitions 4 --replication-factor 3 --topic demo-perf-topic-copy --zookeeper zookeeper-1:2181'
 ```
 
-## Create a source connector
+### Create a source connector
 
 ```bash
 docker-compose exec connect \
