@@ -12,6 +12,4 @@
         <module>producer</module>
         <module>streams</module>
     </modules>
-
-
 </project>

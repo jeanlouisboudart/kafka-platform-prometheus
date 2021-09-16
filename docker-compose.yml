@@ -233,19 +233,19 @@ services:
       - kafka-3
 
   prometheus:
-    image: prom/prometheus:v2.11.1
+    image: prom/prometheus:v2.30.0
     ports:
       - 9090:9090
     volumes:
       - ./prometheus/:/etc/prometheus/
 
   alertmanager:
-    image: prom/alertmanager:v0.18.0
+    image: prom/alertmanager:v0.23.0
     ports:
       - 9093:9093
 
   node-exporter:
-    image: prom/node-exporter:v0.18.1
+    image: prom/node-exporter:v1.2.2
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -257,7 +257,7 @@ services:
       - "^(aufs|proc|nsfs|shm|cgroup|tmpfs|binfmt_misc|debugfs|devpts|fusectl|hugetlbfs|fuse.lxcfs|mqueue|pstore|securityfs|sysfs|autofs|devtmpfs|configfs)"
 
   kafka-lag-exporter:
-    image: lightbend/kafka-lag-exporter:0.5.5
+    image: lightbend/kafka-lag-exporter:0.6.7
     hostname: kafka-lag-exporter
     restart: always
     ports:
@@ -266,7 +266,7 @@ services:
       - ./kafka-lag-exporter/:/opt/docker/conf/
 
   grafana:
-    image: grafana/grafana:7.0.6
+    image: grafana/grafana:8.1.4
     environment:
       GF_INSTALL_PLUGINS: grafana-piechart-panel
     ports:
