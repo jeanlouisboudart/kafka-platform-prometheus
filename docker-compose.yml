@@ -2,7 +2,7 @@ version: "2.4"
 services:
 
   zookeeper-1:
-    image: confluentinc/cp-zookeeper
+    image: confluentinc/cp-zookeeper:6.2.0
     hostname: zookeeper-1
     ports:
       - 12181:2181
@@ -17,7 +17,7 @@ services:
     - ./jmx-exporter:/usr/share/jmx_exporter/
 
   zookeeper-2:
-    image: confluentinc/cp-zookeeper
+    image: confluentinc/cp-zookeeper:6.2.0
     hostname: zookeeper-2
     ports:
       - 12182:2181
@@ -32,7 +32,7 @@ services:
     - ./jmx-exporter:/usr/share/jmx_exporter/
 
   zookeeper-3:
-    image: confluentinc/cp-zookeeper
+    image: confluentinc/cp-zookeeper:6.2.0
     hostname: zookeeper-3
     ports:
       - 12183:2181
@@ -47,7 +47,7 @@ services:
     - ./jmx-exporter:/usr/share/jmx_exporter/
 
   kafka-1:
-    image: confluentinc/cp-kafka:5.5.1
+    image: confluentinc/cp-kafka:6.2.0
     hostname: kafka-1
     ports:
       - 19092:19092
@@ -70,7 +70,7 @@ services:
     - ./jmx-exporter:/usr/share/jmx_exporter/
 
   kafka-2:
-    image: confluentinc/cp-kafka:5.5.1
+    image: confluentinc/cp-kafka:6.2.0
     hostname: kafka-2
     ports:
       - 19093:19093
@@ -93,7 +93,7 @@ services:
     - ./jmx-exporter:/usr/share/jmx_exporter/
 
   kafka-3:
-    image: confluentinc/cp-kafka:5.5.1
+    image: confluentinc/cp-kafka:6.2.0
     hostname: kafka-3
     ports:
       - 19094:19094
@@ -178,7 +178,7 @@ services:
       - kafka-3
 
   ksqldb:
-    image: confluentinc/ksqldb-server:0.13.0
+    image: confluentinc/cp-ksqldb-server:6.2.0
     hostname: ksqldb
     depends_on:
       - kafka-1
@@ -197,7 +197,7 @@ services:
     - ./jmx-exporter:/usr/share/jmx_exporter/
 
   ksqldb-cli:
-    image: confluentinc/ksqldb-cli:0.13.0
+    image: confluentinc/cp-ksqldb-cli:6.2.0
     container_name: ksqldb-cli
     depends_on:
       - ksqldb
@@ -205,7 +205,7 @@ services:
     tty: true
 
   connect:
-    image: confluentinc/cp-kafka-connect:5.5.0
+    image: confluentinc/cp-kafka-connect:6.2.0
     hostname: connect
     ports:
       - "8083:8083"
